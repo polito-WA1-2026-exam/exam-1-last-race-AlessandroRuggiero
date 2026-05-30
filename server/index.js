@@ -2,7 +2,7 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-import { getUser, getNetwork } from "./dao.js";
+import { getUser, getNetwork, getStations, createGame } from "./dao.js";
 import { check, validationResult } from "express-validator";
 
 import passport from "passport";
@@ -75,11 +75,6 @@ app.delete("/api/sessions/current", (req, res) => {
   });
 });
 
-// activate the server
-app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
-});
-
 // DAO functions
 app.get("/api/network", isLoggedIn, async (req, res) => {
   try {
@@ -88,4 +83,33 @@ app.get("/api/network", isLoggedIn, async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: "Internal server error" });
   }
+});
+
+app.post("/api/games", isLoggedIn, async (req, res) => {
+  const user = req.user;
+  try {
+    const network = await getNetwork();
+    const randomStationIndex = () =>
+      Math.floor(Math.random() * network.stations.length);
+    const startStationIndex = randomStationIndex();
+    let endStationIndex = randomStationIndex();
+    while (endStationIndex === startStationIndex) {
+      // TODO: check the distance
+      endStationIndex = randomStationIndex();
+    }
+    const gameId = await createGame(
+      startStationIndex,
+      endStationIndex,
+      user.id,
+      new Date().toISOString(),
+    );
+    res.status(201).json({ id: gameId });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// activate the server
+app.listen(port, () => {
+  console.log(`Server listening at http://localhost:${port}`);
 });

@@ -34,6 +34,16 @@ export const getUser = (email, password) => {
   });
 };
 
+export function getStations() {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT name, id FROM stations";
+    db.all(sql, [], (err, rows) => {
+      if (err) reject(err);
+      else resolve(Object.fromEntries(rows.map((row) => [row.name, row.id])));
+    });
+  });
+}
+
 export function getNetwork() {
   return new Promise((resolve, reject) => {
     const sql = `SELECT s1.name AS station1, s2.name AS station2, l.color AS line
@@ -57,5 +67,21 @@ export function getNetwork() {
         resolve(new Network(stations, lines, connections));
       }
     });
+  });
+}
+
+export function createGame(startStation, endStation, userId, startTime) {
+  return new Promise((resolve, reject) => {
+    const sql = `INSERT INTO games (status, start_station_id, end_station_id, user_id, start_time) VALUES (?, ?, ?, ?, ?)`;
+    db.run(
+      sql,
+      ["active", startStation, endStation, userId, startTime],
+      function (err) {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else resolve(this.lastID);
+      },
+    );
   });
 }

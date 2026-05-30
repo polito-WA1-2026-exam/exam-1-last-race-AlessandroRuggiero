@@ -34,3 +34,6 @@ Content-Type: application/json
 
 ###
 GET {{baseUrl}}/api/network
+
+###
+POST {{baseUrl}}/api/games

@@ -25,3 +25,15 @@ CREATE TABLE connections (
   FOREIGN KEY (station1_id) REFERENCES stations(id),
   FOREIGN KEY (station2_id) REFERENCES stations(id)
 );
+
+CREATE TABLE games (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  status TEXT NOT NULL,
+  start_station_id INTEGER NOT NULL,
+  end_station_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  start_time TEXT NOT NULL,
+  FOREIGN KEY (start_station_id) REFERENCES stations(id),
+  FOREIGN KEY (end_station_id) REFERENCES stations(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);

@@ -9,3 +9,9 @@ export function Network(stations, lines, connections) {
   this.lines = lines;
   this.connections = connections;
 }
+
+export function Game(status, startStation, endStation) {
+  this.status = status;
+  this.startStation = startStation;
+  this.endStation = endStation;
+}
