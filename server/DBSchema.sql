@@ -5,3 +5,23 @@ CREATE TABLE users (
   salt TEXT NOT NULL,
   hash TEXT NOT NULL
 );
+
+CREATE TABLE lines (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  color TEXT NOT NULL
+);
+
+CREATE TABLE stations (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE connections (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  line_id INTEGER NOT NULL,
+  station1_id INTEGER NOT NULL,
+  station2_id INTEGER NOT NULL,
+  FOREIGN KEY (line_id) REFERENCES lines(id),
+  FOREIGN KEY (station1_id) REFERENCES stations(id),
+  FOREIGN KEY (station2_id) REFERENCES stations(id)
+);
