@@ -1,0 +1,21 @@
+@baseUrl = http://localhost:3001
+
+POST {{baseUrl}}/api/sessions
+Content-Type: application/json
+{
+	"username": "alessandro.ruggiero.dev@gmail.com",
+	"password": "password"
+}
+
+GET {{baseUrl}}/api/sessions/current
+
+DELETE {{baseUrl}}/api/sessions/current
+
+GET {{baseUrl}}/api/sessions/current
+
+POST {{baseUrl}}/api/sessions
+Content-Type: application/json
+{
+	"username": "user1",
+	"password": "wrong"
+}
