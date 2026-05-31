@@ -109,7 +109,7 @@ export default function NewGame() {
 
     const handleStart = () =>
         createGame()
-            .then((game) => navigate(`/play/${game.id}`))
+            .then((game) => navigate(`/play/${game.id}`, { state: { game, network } }))
             .catch((e) => setError(e.message));
 
     return (

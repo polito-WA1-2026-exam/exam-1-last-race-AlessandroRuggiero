@@ -14,6 +14,18 @@ export async function getNetwork() {
   }
 }
 
+export async function getGame(id) {
+  const response = await fetch(`${baseUrl}/games/${id}`, {
+    credentials: "include",
+  });
+
+  if (response.ok) {
+    return await response.json();
+  } else {
+    throw new Error("Failed to fetch game");
+  }
+}
+
 export async function createGame() {
   const response = await fetch(`${baseUrl}/games`, {
     method: "POST",
