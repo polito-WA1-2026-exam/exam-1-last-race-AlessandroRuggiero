@@ -1,63 +1,33 @@
 import { useEffect, useState } from "react";
-import { Badge, Button, Modal, Spinner } from "react-bootstrap";
+import { Button, Modal, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import { createGame, getNetwork } from "../api/game";
+import { LINE_COLORS, LINE_VARIANTS } from "../models/colors";
+import { MetroDot, MetroConnector} from "./Metro";
 import { getOrderedLines } from "../models/network";
+import { Badge } from "react-bootstrap";
 
-const LINE_COLORS = {
-    Blue: "#0d6efd",
-    Red: "#dc3545",
-    Green: "#198754",
-    Yellow: "#ffc107",
-};
-
-const LINE_VARIANTS = {
-    Blue: "primary",
-    Red: "danger",
-    Green: "success",
-    Yellow: "warning",
-};
-
-function MetroLine({ lineName, stations, stationLines }) {
+export function MetroLine({ lineName, stations, stationLines }) {
     const color = LINE_COLORS[lineName] ?? "#6c757d";
     const variant = LINE_VARIANTS[lineName] ?? "secondary";
 
     return (
         <div className="mb-4">
-            <Badge bg={variant} className="mb-2">
-                {lineName} Line
-            </Badge>
+            <Badge bg={variant} className="mb-2">{lineName} Line</Badge>
             <div className="metro-line-col">
                 {stations.map((station, i) => {
-                    const otherLines = (stationLines.get(station) ?? []).filter(
-                        (l) => l !== lineName
-                    );
+                    const otherLines = (stationLines.get(station) ?? []).filter((l) => l !== lineName);
                     return (
                         <div key={station} className="metro-station">
                             <div className="metro-track">
-                                {i > 0 && (
-                                    <div
-                                        className="metro-connector"
-                                        style={{ backgroundColor: color }}
-                                    />
-                                )}
-                                <div className="metro-dot" style={{ color }} />
-                                {i < stations.length - 1 && (
-                                    <div
-                                        className="metro-connector"
-                                        style={{ backgroundColor: color }}
-                                    />
-                                )}
+                                {i > 0 && <MetroConnector color={color} vertical={true} />}
+                                <MetroDot color={color} />
+                                {i < stations.length - 1 && <MetroConnector color={color} vertical={true} />}
                             </div>
                             <div className="metro-label text-muted">
                                 {station}
                                 {otherLines.map((l) => (
-                                    <Badge
-                                        key={l}
-                                        bg={LINE_VARIANTS[l] ?? "secondary"}
-                                        className="ms-1"
-                                        style={{ fontSize: "0.75rem" }}
-                                    >
+                                    <Badge key={l} bg={LINE_VARIANTS[l] ?? "secondary"} className="ms-1" style={{ fontSize: "0.75rem" }}>
                                         {l}
                                     </Badge>
                                 ))}
@@ -70,7 +40,7 @@ function MetroLine({ lineName, stations, stationLines }) {
     );
 }
 
-function NetworkDisplay({ network }) {
+export function NetworkDisplay({ network }) {
     const orderedLines = getOrderedLines(network);
 
     const stationLines = new Map();
@@ -84,16 +54,12 @@ function NetworkDisplay({ network }) {
     return (
         <div className="d-flex gap-4 flex-wrap">
             {[...orderedLines.entries()].map(([line, stations]) => (
-                <MetroLine
-                    key={line}
-                    lineName={line}
-                    stations={stations}
-                    stationLines={stationLines}
-                />
+                <MetroLine key={line} lineName={line} stations={stations} stationLines={stationLines} />
             ))}
         </div>
     );
 }
+
 
 export default function NewGame() {
     const [network, setNetwork] = useState(null);
