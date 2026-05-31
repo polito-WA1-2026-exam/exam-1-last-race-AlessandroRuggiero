@@ -7,6 +7,9 @@ const DATABASE_FILE = "gameDB.sqlite";
 
 const lines = {
   Blue: [
+    "Skärmarbrink",
+    "Gullmarsplan",
+    "Sofia",
     "Kungsträdgården",
     "T-Centralen",
     "Rådhuset",
@@ -18,9 +21,10 @@ const lines = {
     "Näckrosen",
     "Kista",
     "Husby",
-    "Akalla",
   ],
   Red: [
+    "Tekniska högskolan",
+    "Stadion",
     "Östermalmstorg",
     "T-Centralen",
     "Gamla stan",
@@ -34,8 +38,6 @@ const lines = {
     "Axelsberg",
   ],
   Green: [
-    "Alvik",
-    "Kristineberg",
     "Thorildplan",
     "Fridhemsplan",
     "Sankt Eriksplan",
