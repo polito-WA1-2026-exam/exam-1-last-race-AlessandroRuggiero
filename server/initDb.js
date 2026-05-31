@@ -86,29 +86,38 @@ function exec(sql) {
     });
   });
 }
+
+async function createUser(email, username, password) {
+  const salt = crypto.randomBytes(16).toString("hex");
+  const hash = await new Promise((resolve, reject) =>
+    crypto.scrypt(password, salt, 16, (err, h) =>
+      err ? reject(err) : resolve(h),
+    ),
+  );
+  return run(
+    "INSERT INTO users (email, username, salt, hash) VALUES (?, ?, ?, ?)",
+    [email, username, salt, hash.toString("hex")],
+  );
+}
+
 async function initDb() {
   let stationsIds = new Map();
   const schema = fs.readFileSync(SCHEMA_FILE, "utf-8");
 
-  const salt = crypto.randomBytes(16).toString("hex");
-  const hash = await new Promise((resolve, reject) =>
-    crypto.scrypt("password", salt, 16, (err, h) =>
-      err ? reject(err) : resolve(h),
-    ),
-  );
-
   await exec(schema);
   console.log("Database initialized");
 
-  await run(
-    "INSERT INTO users (email, username, salt, hash) VALUES (?, ?, ?, ?)",
-    [
-      "alessandro.ruggiero.dev@gmail.com",
-      "Alessandro Ruggiero",
-      salt,
-      hash.toString("hex"),
-    ],
+  await createUser(
+    "alessandro.ruggiero.dev@gmail.com",
+    "Alessandro",
+    "ale-password",
   );
+  await createUser(
+    "s358751@studenti.polito.it",
+    "StudentMaster",
+    "studentMaster-password",
+  );
+  await createUser("s309582@studenti.polito.it", "Student", "student-password");
   console.log("User initialized");
 
   for (const [line, stations] of Object.entries(lines)) {

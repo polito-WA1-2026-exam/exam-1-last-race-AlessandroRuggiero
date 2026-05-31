@@ -65,3 +65,25 @@ Content-Type: application/json
 {
 	"connections": []
 }
+
+###
+GET {{baseUrl}}/api/leaderboard
+
+###
+GET {{baseUrl}}/api/leaderboard?count=5
+
+###
+# should return 422
+GET {{baseUrl}}/api/leaderboard?count=0
+
+###
+# should return 422
+GET {{baseUrl}}/api/leaderboard?count=-1
+
+###
+# should return 422
+GET {{baseUrl}}/api/leaderboard?count=abc
+
+###
+# should return 422
+GET {{baseUrl}}/api/leaderboard?count=1000

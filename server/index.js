@@ -10,6 +10,7 @@ import {
   getGame,
   answerGame,
   getEvents,
+  getLeaderboard,
 } from "./dao.js";
 import { Game } from "./models.js";
 import { calculateStops, verifyConnectionPath } from "./graph.js";
@@ -217,6 +218,8 @@ app.post(
         coins = 0;
       }
 
+      coins = Math.max(coins, 0);
+
       await answerGame(req.params.id, req.user.id, connections, status, coins);
       res.json({ status, coins, happenedEvents });
     } catch (err) {
@@ -225,6 +228,28 @@ app.post(
     }
   },
 );
+
+app.get(
+  "/api/leaderboard",
+  isLoggedIn,
+  check("count")
+    .optional()
+    .isInt({ min: 1, max: 250 })
+    .withMessage("count must be an integer between 1 and 250"),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(422).json({ error: errors.array()[0].msg });
+    try {
+      const count = req.query.count ? parseInt(req.query.count) : 10;
+      const leaderboard = await getLeaderboard(count);
+      res.json(leaderboard);
+    } catch (err) {
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+);
+
 // activate the server
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);

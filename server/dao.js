@@ -140,3 +140,32 @@ export function createGame(startStation, endStation, userId, startTime, coins) {
     );
   });
 }
+
+export function getLeaderboard(playerCount) {
+  return new Promise((resolve, reject) => {
+    const sql = `WITH best AS (
+        SELECT user_id, MAX(coins) AS coins
+        FROM games
+        WHERE status = 'won'
+        GROUP BY user_id
+      )
+      SELECT u.username AS username, u.id AS userId, b.coins, g.answer,
+        s1.name AS startStation, s2.name AS endStation
+      FROM best b
+      JOIN games g ON g.id = (
+        SELECT id FROM games
+        WHERE user_id = b.user_id AND coins = b.coins AND status = 'won'
+        ORDER BY start_time DESC LIMIT 1
+      )
+      JOIN users u ON u.id = b.user_id
+      JOIN stations s1 ON g.start_station_id = s1.id
+      JOIN stations s2 ON g.end_station_id = s2.id
+      ORDER BY b.coins DESC
+      LIMIT ?`;
+
+    db.all(sql, [playerCount], (err, rows) => {
+      if (err) reject(err);
+      else resolve(rows.map((r) => ({ ...r, answer: JSON.parse(r.answer) })));
+    });
+  });
+}

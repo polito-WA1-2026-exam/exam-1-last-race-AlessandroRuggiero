@@ -45,3 +45,5 @@ CREATE TABLE games (
   FOREIGN KEY (end_station_id) REFERENCES stations(id),
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+CREATE INDEX idx_games_leaderboard ON games(user_id, status, coins);
