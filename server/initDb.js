@@ -177,7 +177,7 @@ async function initDb() {
     { description: "Event 7", effect: 4 },
     { description: "Event 8", effect: -3 },
     { description: "Event 9", effect: 2 },
-    { description: "Event 10", effect: -5 },
+    { description: "Event 10", effect: 0 },
   ];
   for (const event of events) {
     await run("INSERT INTO events (description, effect) VALUES (?, ?)", [

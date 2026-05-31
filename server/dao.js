@@ -87,7 +87,7 @@ export function getEvents() {
 
 export function getGame(gameId, userId) {
   return new Promise((resolve, reject) => {
-    const sql = `SELECT g.id, g.status, g.start_time, s1.name AS startStation, s2.name AS endStation, g.coins AS coins
+    const sql = `SELECT g.id, g.status, g.start_time, s1.name AS startStation, s2.name AS endStation, g.coins AS coins, g.answer AS answer
       FROM games g
       JOIN stations s1 ON g.start_station_id = s1.id
       JOIN stations s2 ON g.end_station_id = s2.id
@@ -105,6 +105,7 @@ export function getGame(gameId, userId) {
             row.start_time,
             row.status,
             row.coins,
+            row.answer ? JSON.parse(row.answer) : null,
           ),
         );
     });

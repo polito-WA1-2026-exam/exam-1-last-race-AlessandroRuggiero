@@ -141,6 +141,7 @@ app.post("/api/games", isLoggedIn, async (req, res) => {
       startTime,
       "active",
       startCoins,
+      null,
     );
     res.status(201).json(game);
   } catch (err) {

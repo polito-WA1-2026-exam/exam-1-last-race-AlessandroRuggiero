@@ -25,6 +25,7 @@ export function Game(
   startTime,
   status,
   coins,
+  answer,
 ) {
   this.id = id;
   this.startStation = startStation;
@@ -33,4 +34,5 @@ export function Game(
   this.startTime = startTime;
   this.status = status;
   this.coins = coins;
+  this.answer = answer;
 }
