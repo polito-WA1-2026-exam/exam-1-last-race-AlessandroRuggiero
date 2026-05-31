@@ -37,3 +37,31 @@ GET {{baseUrl}}/api/network
 
 ###
 POST {{baseUrl}}/api/games
+
+###
+GET {{baseUrl}}/api/games/2
+
+###
+POST {{baseUrl}}/api/games/2/answer
+Content-Type: application/json
+
+{
+	"connections": [19, 18, 17, 16, 15, 14, 13, 1]
+}
+
+###
+POST {{baseUrl}}/api/games/1/answer
+Content-Type: application/json
+
+{
+	"connections": [99, 100]
+}
+
+###
+# should return 422
+POST {{baseUrl}}/api/games/1/answer
+Content-Type: application/json
+
+{
+	"connections": []
+}

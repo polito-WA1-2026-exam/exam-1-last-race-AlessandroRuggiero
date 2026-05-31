@@ -1,7 +1,14 @@
-export function Connection(station1, station2, line) {
+export function Event(id, description, effect) {
+  this.id = id;
+  this.description = description;
+  this.effect = effect;
+}
+
+export function Connection(station1, station2, line, id) {
   this.station1 = station1;
   this.station2 = station2;
   this.line = line;
+  this.id = id;
 }
 
 export function Network(stations, lines, connections) {
@@ -10,8 +17,20 @@ export function Network(stations, lines, connections) {
   this.connections = connections;
 }
 
-export function Game(status, startStation, endStation) {
-  this.status = status;
+export function Game(
+  id,
+  startStation,
+  endStation,
+  userId,
+  startTime,
+  status,
+  coins,
+) {
+  this.id = id;
   this.startStation = startStation;
   this.endStation = endStation;
+  this.userId = userId;
+  this.startTime = startTime;
+  this.status = status;
+  this.coins = coins;
 }

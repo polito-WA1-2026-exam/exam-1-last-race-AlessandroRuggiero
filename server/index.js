@@ -2,8 +2,19 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-import { getUser, getNetwork, getStations, createGame } from "./dao.js";
+import {
+  getUser,
+  getNetwork,
+  getStations,
+  createGame,
+  getGame,
+  answerGame,
+  getEvents,
+} from "./dao.js";
+import { Game } from "./models.js";
+import { calculateStops, verifyConnectionPath } from "./graph.js";
 import { check, validationResult } from "express-validator";
+import dayjs from "dayjs";
 
 import passport from "passport";
 import LocalStrategy from "passport-local";
@@ -57,9 +68,21 @@ app.use(passport.authenticate("session"));
 /* ROUTES */
 
 // POST /api/sessions
-app.post("/api/sessions", passport.authenticate("local"), function (req, res) {
-  return res.status(201).json(req.user);
-});
+app.post(
+  "/api/sessions",
+  check("username").isString().notEmpty().withMessage("Username is required"),
+  check("password").isString().notEmpty().withMessage("Password is required"),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(422).json({ error: errors.array()[0].msg });
+    next();
+  },
+  passport.authenticate("local"),
+  function (req, res) {
+    return res.status(201).json(req.user);
+  },
+);
 
 // GET /api/sessions/current
 app.get("/api/sessions/current", (req, res) => {
@@ -88,27 +111,120 @@ app.get("/api/network", isLoggedIn, async (req, res) => {
 app.post("/api/games", isLoggedIn, async (req, res) => {
   const user = req.user;
   try {
-    const network = await getNetwork();
-    const randomStationIndex = () =>
-      Math.floor(Math.random() * network.stations.length);
-    const startStationIndex = randomStationIndex();
-    let endStationIndex = randomStationIndex();
-    while (endStationIndex === startStationIndex) {
-      // TODO: check the distance
-      endStationIndex = randomStationIndex();
+    const [network, stationNameToId] = await Promise.all([
+      getNetwork(),
+      getStations(),
+    ]);
+    const randomStation = () =>
+      network.stations[Math.floor(Math.random() * network.stations.length)];
+    const startStation = randomStation();
+    let endStation = randomStation();
+    console.log("start:", startStation, "end:", endStation);
+    while (calculateStops(network, startStation, endStation) < 3) {
+      endStation = randomStation();
     }
+    const startTime = dayjs().unix();
+    const startCoins = 20;
     const gameId = await createGame(
-      startStationIndex,
-      endStationIndex,
+      stationNameToId[startStation],
+      stationNameToId[endStation],
       user.id,
-      new Date().toISOString(),
+      startTime,
+      startCoins,
     );
-    res.status(201).json({ id: gameId });
+    const game = new Game(
+      gameId,
+      startStation,
+      endStation,
+      user.id,
+      startTime,
+      "active",
+      startCoins,
+    );
+    res.status(201).json(game);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
+app.get(
+  "/api/games/:id",
+  isLoggedIn,
+  check("id").isInt({ min: 1 }).withMessage("Invalid game id"),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(422).json({ error: errors.array()[0].msg });
+    try {
+      const game = await getGame(req.params.id, req.user.id);
+      if (!game) return res.status(404).json({ error: "Game not found" });
+      res.json(game);
+    } catch (err) {
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+);
+
+app.post(
+  "/api/games/:id/answer",
+  isLoggedIn,
+  check("connections").isArray({ min: 1 }).withMessage("Invalid answer"),
+  check("connections.*").isInt({ min: 1 }).withMessage("Invalid connection id"),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(422).json({ error: errors.array()[0].msg });
+    const { connections } = req.body;
+    try {
+      const [game, network, events] = await Promise.all([
+        getGame(req.params.id, req.user.id),
+        getNetwork(),
+        getEvents(),
+      ]);
+      if (!game) return res.status(404).json({ error: "Game not found" });
+      if (game.status !== "active") {
+        return res.status(409).json({ error: "Game already completed" });
+      }
+
+      const normalGameDuration = 90; // seconds
+      const tollerance = 25; // percentage
+      const gameDuration = dayjs().unix() - game.startTime;
+      if (gameDuration > normalGameDuration * (1 + tollerance / 100)) {
+        console.log(
+          `(${game.id}) - Game duration ${gameDuration}s exceeded normal duration ${normalGameDuration}s`,
+        );
+        //return res.status(409).json({ error: "Time limit exceeded" });
+      }
+
+      const correct = verifyConnectionPath(
+        network,
+        connections,
+        game.startStation,
+        game.endStation,
+      );
+
+      const status = correct ? "won" : "lost";
+      let coins = game.coins;
+      let happenedEvents = [];
+      if (status === "won") {
+        for (const station of connections) {
+          let randomEvent = events[Math.floor(Math.random() * events.length)];
+          coins += randomEvent.effect;
+          happenedEvents.push(randomEvent);
+        }
+      } else {
+        coins = 0;
+      }
+
+      await answerGame(req.params.id, req.user.id, connections, status, coins);
+      res.json({ status, coins, happenedEvents });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+);
 // activate the server
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);

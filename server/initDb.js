@@ -158,6 +158,26 @@ async function initDb() {
     console.log("Network size is sufficient");
   }
 
+  const events = [
+    { description: "Event 1", effect: 0 },
+    { description: "Event 2", effect: -2 },
+    { description: "Event 3", effect: 1 },
+    { description: "Event 4", effect: -4 },
+    { description: "Event 5", effect: 3 },
+    { description: "Event 6", effect: -1 },
+    { description: "Event 7", effect: 4 },
+    { description: "Event 8", effect: -3 },
+    { description: "Event 9", effect: 2 },
+    { description: "Event 10", effect: -5 },
+  ];
+  for (const event of events) {
+    await run("INSERT INTO events (description, effect) VALUES (?, ?)", [
+      event.description,
+      event.effect,
+    ]);
+  }
+  console.log(`${events.length} events initialized`);
+
   db.close((err) => {
     if (err) throw err;
     console.log("Database connection closed");
