@@ -1,0 +1,103 @@
+@baseUrl = http://localhost:3001
+
+###
+
+POST {{baseUrl}}/api/sessions
+Content-Type: application/json
+
+{
+	"username": "alessandro.ruggiero.dev@gmail.com",
+	"password": "ale-password"
+}
+
+###
+
+GET {{baseUrl}}/api/sessions/current
+
+###
+
+DELETE {{baseUrl}}/api/sessions/current
+
+###
+
+POST {{baseUrl}}/api/sessions
+Content-Type: application/json
+
+{
+	"username": "alessandro.ruggiero.dev@gmail.com",
+	"password": "wrong"
+}
+
+###
+POST {{baseUrl}}/api/sessions
+Content-Type: application/json
+
+{
+	"username": "s358751@studenti.polito.it",
+	"password": "studentMaster-password"
+}
+
+###
+POST {{baseUrl}}/api/sessions
+Content-Type: application/json
+
+{
+	"username": "s309582@studenti.polito.it",
+	"password": "student-password"
+}
+
+###
+GET {{baseUrl}}/api/network
+
+###
+POST {{baseUrl}}/api/games
+
+###
+GET {{baseUrl}}/api/games/7
+
+###
+POST {{baseUrl}}/api/games/7/answer
+Content-Type: application/json
+
+{
+	"connections": [12, 30, 31, 32, 33]
+}
+
+###
+POST {{baseUrl}}/api/games/1/answer
+Content-Type: application/json
+
+{
+	"connections": [99, 100]
+}
+
+###
+# should return 422
+POST {{baseUrl}}/api/games/1/answer
+Content-Type: application/json
+
+{
+	"connections": []
+}
+
+###
+GET {{baseUrl}}/api/leaderboard
+
+###
+GET {{baseUrl}}/api/leaderboard?count=5
+
+###
+# should return 422
+GET {{baseUrl}}/api/leaderboard?count=0
+
+###
+# should return 422
+GET {{baseUrl}}/api/leaderboard?count=-1
+
+###
+# should return 422
+GET {{baseUrl}}/api/leaderboard?count=abc
+
+###
+# should return 422
+GET {{baseUrl}}/api/leaderboard?count=1000
