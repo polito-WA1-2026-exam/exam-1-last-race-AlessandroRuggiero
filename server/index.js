@@ -28,7 +28,13 @@ const port = 3001;
 // middlewares
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(cors());
+
+const corsOptions = {
+  origin: "http://localhost:5173",
+  optionsSuccessStatus: 200,
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 passport.use(
   new LocalStrategy(async function verify(username, password, cb) {
@@ -251,7 +257,11 @@ app.get(
   },
 );
 
+app.get("/api/", async (req, res) => {
+  res.json({ message: "Server is running" });
+});
+
 // activate the server
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
