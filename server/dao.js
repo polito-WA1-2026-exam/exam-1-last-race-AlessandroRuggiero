@@ -96,10 +96,10 @@ export function getGame(gameId, userId) {
     });
 }
 
-export function answerGame(gameId, userId, answer, status, coins) {
+export function answerGame(gameId, userId, answer, status, coins, endTime) {
     return new Promise((resolve, reject) => {
-        const sql = `UPDATE games SET status = ?, answer = ?, coins = ? WHERE id = ? AND user_id = ?`;
-        db.run(sql, [status, JSON.stringify(answer), coins, gameId, userId], function (err) {
+        const sql = `UPDATE games SET status = ?, answer = ?, coins = ?, end_time = ? WHERE id = ? AND user_id = ?`;
+        db.run(sql, [status, JSON.stringify(answer), coins, endTime, gameId, userId], function (err) {
             if (err) reject(err);
             else resolve(this.changes > 0);
         });
@@ -127,7 +127,7 @@ export function getLeaderboard(playerCount) {
         GROUP BY user_id
       )
       SELECT u.username AS username, u.id AS userId, b.coins, g.answer,
-        s1.name AS startStation, s2.name AS endStation
+        s1.name AS startStation, s2.name AS endStation, g.start_time AS startTime, g.end_time AS endTime
       FROM best b
       JOIN games g ON g.id = (
         SELECT id FROM games

@@ -38,6 +38,14 @@ export async function submitAnswer(gameId, connectionIds) {
     throw new Error("Failed to submit answer");
 }
 
+export async function getLeaderboard(count = 10) {
+    const response = await fetch(`${baseUrl}/leaderboard?count=${count}`, {
+        credentials: "include",
+    });
+    if (response.ok) return await response.json();
+    throw new Error("Failed to fetch leaderboard");
+}
+
 export async function createGame() {
     const response = await fetch(`${baseUrl}/games`, {
         method: "POST",

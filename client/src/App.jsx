@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import NewGame from "./components/NewGame";
 import PlayGame from "./components/PlayGame";
+import LeaderBoard from "./components/LeaderBoard";
 
 function App() {
     const navigate = useNavigate();
@@ -56,6 +57,7 @@ function App() {
                         <Route path="logout" element={<Logout doLogin={doLogin} />} />
                         <Route path="play" element={<NewGame />} />
                         <Route path="play/:id" element={<PlayGame />} />
+                        <Route path="leaderboard" element={<LeaderBoard />} />
                     </Route>
                 </Routes>
             </UserContext.Provider>

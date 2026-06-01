@@ -39,6 +39,7 @@ CREATE TABLE games (
   end_station_id INTEGER NOT NULL,
   user_id INTEGER NOT NULL,
   start_time INTEGER NOT NULL,
+  end_time INTEGER DEFAULT NULL,
   coins INTEGER NOT NULL,
   answer TEXT DEFAULT NULL,
   FOREIGN KEY (start_station_id) REFERENCES stations(id),

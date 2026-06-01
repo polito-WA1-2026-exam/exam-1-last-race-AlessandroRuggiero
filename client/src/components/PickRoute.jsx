@@ -76,9 +76,6 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit, s
                     endStation={game.endStation}
                     colors={[START_COLOR, END_COLOR]}
                 />
-                <Badge bg="warning" text="dark">
-                    Coins: {game.coins}
-                </Badge>
                 <div className="ms-auto d-flex align-items-center gap-2">
                     <Button
                         variant="outline-secondary"

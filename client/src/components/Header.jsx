@@ -6,15 +6,17 @@ import UserContext from "../contexts/UserContext";
 
 function Header() {
     const user = useContext(UserContext);
-    const destination = user.id ? "/home" : "/";
 
     return (
         <Navbar bg="light" expand="sm" className="shadow-sm py-3">
             <Container>
-                <Navbar.Brand as={Link} to={destination} className="fw-bold fs-4">
+                <Navbar.Brand as={Link} to={"/"} className="fw-bold fs-4">
                     LastRace
                 </Navbar.Brand>
                 <Nav className="ms-auto align-items-center gap-2">
+                    <Nav.Link as={Link} to="/leaderboard">
+                        Leaderboard
+                    </Nav.Link>
                     {user.username ? <UserInfo name={user.username} /> : <LoginButton />}
                 </Nav>
             </Container>

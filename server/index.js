@@ -158,6 +158,7 @@ app.post(
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) return res.status(422).json({ error: errors.array()[0].msg });
+        const currentTime = dayjs().unix();
         const { connections } = req.body;
         try {
             const [game, network, events] = await Promise.all([
@@ -172,7 +173,7 @@ app.post(
 
             const normalGameDuration = 90; // seconds
             const tollerance = 25; // percentage
-            const gameDuration = dayjs().unix() - game.startTime;
+            const gameDuration = currentTime - game.startTime;
             if (gameDuration > normalGameDuration * (1 + tollerance / 100)) {
                 console.log(
                     `(${game.id}) - Game duration ${gameDuration}s exceeded normal duration ${normalGameDuration}s`,
@@ -197,7 +198,7 @@ app.post(
 
             coins = Math.max(coins, 0);
 
-            await answerGame(req.params.id, req.user.id, connections, status, coins);
+            await answerGame(req.params.id, req.user.id, connections, status, coins, currentTime);
             res.json({ status, coins, happenedEvents, answer: connections });
         } catch (err) {
             console.error(err);

@@ -1,0 +1,157 @@
+import { useEffect, useState } from "react";
+import { Table, Badge, Spinner, Alert, OverlayTrigger, Popover } from "react-bootstrap";
+import dayjs from "dayjs";
+import { getLeaderboard, getNetwork } from "../api/game";
+import { RoutePreview, MetroDot, MetroConnector } from "./Metro";
+import { START_COLOR, END_COLOR, GREY } from "../models/colors";
+
+const MEDAL = ["🥇", "🥈", "🥉"];
+
+const formatDate = (unixSeconds) => dayjs.unix(unixSeconds).format("DD/MM/YYYY");
+
+function buildStops(connectionIds, network) {
+    const byId = Object.fromEntries(network.connections.map((c) => [c.id, c]));
+    const conns = connectionIds?.map((id) => byId[id]).filter((c) => c != null) ?? [];
+    if (!conns.length) return [];
+
+    let stations;
+    if (conns.length === 1) {
+        stations = [conns[0].station1, conns[0].station2];
+    } else {
+        const [c0, c1] = conns;
+        // connections are bidirectional, check c1 to determine which end of c0 is the entry point
+        stations =
+            c0.station2 === c1.station1 || c0.station2 === c1.station2
+                ? [c0.station1, c0.station2] // travelling station1 -> station2
+                : [c0.station2, c0.station1]; // travelling station2 -> station1
+    }
+    // once we know the direction of the first connection we can just walk forward and add the next station at each step
+    // because the connections are guaranteed to be valid and in the correct order
+    for (let i = 1; i < conns.length; i++) {
+        const c = conns[i];
+        const last = stations[stations.length - 1];
+        stations.push(c.station1 === last ? c.station2 : c.station1); // walk forward regardless of stored direction
+    }
+    return stations;
+}
+
+function StopsPopover({ entry, network, ...props }) {
+    const stops = network ? buildStops(entry.answer, network) : [];
+    const dotColor = (i) => {
+        if (i === 0) return START_COLOR;
+        if (i === stops.length - 1) return END_COLOR;
+        return GREY;
+    };
+
+    return (
+        <Popover {...props} style={{ ...props.style, maxWidth: 320 }}>
+            <Popover.Header className="fw-semibold">
+                {entry.username}'s route &mdash; {formatDate(entry.startTime)}
+            </Popover.Header>
+            <Popover.Body className="py-2 px-3">
+                <div className="metro-line-col">
+                    {stops.map((station, i) => (
+                        <div key={i} className="metro-station">
+                            <div className="metro-track">
+                                <MetroConnector color={i > 0 ? GREY : "transparent"} vertical={true} />
+                                <MetroDot color={dotColor(i)} />
+                                <MetroConnector color={i < stops.length - 1 ? GREY : "transparent"} vertical={true} />
+                            </div>
+                            <span
+                                className="metro-label fw-semibold"
+                                style={{
+                                    color: dotColor(i) !== GREY ? dotColor(i) : undefined,
+                                }}
+                            >
+                                {station}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            </Popover.Body>
+        </Popover>
+    );
+}
+
+export default function LeaderBoard() {
+    const [entries, setEntries] = useState([]);
+    const [network, setNetwork] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        Promise.all([getLeaderboard(10), getNetwork()])
+            .then(([lb, net]) => {
+                setEntries(lb);
+                setNetwork(net);
+            })
+            .catch(() => setError("Failed to load leaderboard."))
+            .finally(() => setLoading(false));
+    }, []);
+
+    if (loading)
+        return (
+            <div className="text-center py-5">
+                <Spinner animation="border" />
+            </div>
+        );
+
+    if (error) return <Alert variant="danger">{error}</Alert>;
+
+    return (
+        <div className="container py-4">
+            <h2 className="mb-4">Leaderboard</h2>
+            <Table striped hover responsive>
+                <thead className="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Player</th>
+                        <th>Best Route</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th className="text-end">Coins</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {entries.map((entry, i) => (
+                        <tr key={entry.userId}>
+                            <td className="fw-bold">{MEDAL[i] ?? i + 1}</td>
+                            <td className="fw-semibold">{entry.username}</td>
+                            <td>
+                                <OverlayTrigger
+                                    trigger={["hover", "focus"]}
+                                    placement="right"
+                                    overlay={<StopsPopover entry={entry} network={network} />}
+                                >
+                                    <span style={{ cursor: "default", display: "inline-flex" }}>
+                                        <RoutePreview
+                                            startStation={entry.startStation}
+                                            endStation={entry.endStation}
+                                            colors={[START_COLOR, END_COLOR]}
+                                        />
+                                    </span>
+                                </OverlayTrigger>
+                            </td>
+                            <td className="text-muted small align-middle">{formatDate(entry.startTime)}</td>
+                            <td className="text-muted small align-middle">
+                                {Math.floor(entry.endTime - entry.startTime)}s
+                            </td>
+                            <td className="text-end">
+                                <Badge bg="warning" text="dark" pill>
+                                    {entry.coins}
+                                </Badge>
+                            </td>
+                        </tr>
+                    ))}
+                    {entries.length === 0 && (
+                        <tr>
+                            <td colSpan={6} className="text-center text-muted py-4">
+                                No completed games yet. Claim your place by winning a game!
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </Table>
+        </div>
+    );
+}
