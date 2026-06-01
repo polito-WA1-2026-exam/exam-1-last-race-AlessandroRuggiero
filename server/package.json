@@ -1,29 +1,31 @@
 {
-  "name": "server",
-  "version": "1.0.0",
-  "description": "",
-  "license": "ISC",
-  "author": "",
-  "type": "module",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "init-db": "node initDb.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-    "express": "^5.2.1",
-    "cors": "^2.8.6",
-    "dayjs": "^1.11.20",
-    "express-session": "^1.19.0",
-    "express-validator": "^7.3.1",
-    "morgan": "^1.10.1",
-    "passport": "^0.7.0",
-    "passport-local": "^1.0.0",
-    "sqlite3": "^6.0.1"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.14"
-  }
+    "name": "server",
+    "version": "1.0.0",
+    "description": "",
+    "license": "ISC",
+    "author": "",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "dev": "nodemon index.js",
+        "init-db": "node initDb.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "format": "prettier --write ."
+    },
+    "dependencies": {
+        "cors": "^2.8.6",
+        "dayjs": "^1.11.20",
+        "express": "^5.2.1",
+        "express-session": "^1.19.0",
+        "express-validator": "^7.3.1",
+        "morgan": "^1.10.1",
+        "passport": "^0.7.0",
+        "passport-local": "^1.0.0",
+        "sqlite3": "^6.0.1"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.14",
+        "prettier": "^3.8.3"
+    }
 }
