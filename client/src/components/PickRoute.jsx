@@ -68,15 +68,19 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit, s
         );
 
     return (
-        <div className="container-fluid py-4">
-            <div className="d-flex align-items-center gap-3 mb-3 sticky-top bg-white py-2 shadow-sm">
+        <div className="container py-4">
+            <div className="d-flex align-items-center mb-3 sticky-top bg-white py-2 shadow-sm">
                 <h4 className="mb-0">Game #{game.id}</h4>
-                <RoutePreview
-                    startStation={game.startStation}
-                    endStation={game.endStation}
-                    colors={[START_COLOR, END_COLOR]}
-                />
-                <div className="ms-auto d-flex align-items-center gap-2">
+                <div className="flex-grow-1 d-flex justify-content-center">
+                    <div style={{ fontSize: "1.15rem" }}>
+                        <RoutePreview
+                            startStation={game.startStation}
+                            endStation={game.endStation}
+                            colors={[START_COLOR, END_COLOR]}
+                        />
+                    </div>
+                </div>
+                <div className="d-flex align-items-center gap-2">
                     <Button
                         variant="outline-secondary"
                         size="sm"
