@@ -1,15 +1,15 @@
 export const LINE_COLORS = {
-  Blue: "#0d6efd",
-  Red: "#dc3545",
-  Green: "#198754",
-  Yellow: "#ffc107",
+    Blue: "#0d6efd",
+    Red: "#dc3545",
+    Green: "#198754",
+    Yellow: "#ffc107",
 };
 
 export const LINE_VARIANTS = {
-  Blue: "primary",
-  Red: "danger",
-  Green: "success",
-  Yellow: "warning",
+    Blue: "primary",
+    Red: "danger",
+    Green: "success",
+    Yellow: "warning",
 };
 
 export const GREY = "#adb5bd";

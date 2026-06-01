@@ -1,60 +1,75 @@
-import { useNavigate, Routes, Route, Outlet } from 'react-router';
-import './App.css';
-import { useEffect, useState } from 'react';
-import UserContext from './contexts/UserContext';
-import { checkSession } from './api/auth';
-import { LoginForm, Logout } from './components/LoginForm';
-import Header from './components/Header';
-import Home from './components/Home';
-import NewGame from './components/NewGame';
-import PlayGame from './components/PlayGame';
+import { useNavigate, Routes, Route, Outlet } from "react-router";
+import "./App.css";
+import { useEffect, useState } from "react";
+import UserContext from "./contexts/UserContext";
+import { checkSession } from "./api/auth";
+import { LoginForm, Logout } from "./components/LoginForm";
+import Header from "./components/Header";
+import Home from "./components/Home";
+import NewGame from "./components/NewGame";
+import PlayGame from "./components/PlayGame";
 
 function App() {
-  const navigate = useNavigate()
+    const navigate = useNavigate();
 
-  // get login session
-  const [user, setUser] = useState({ id: undefined, email: undefined, name: undefined })
+    // get login session
+    const [user, setUser] = useState({
+        id: undefined,
+        email: undefined,
+        name: undefined,
+    });
 
-  useEffect(() => {
-    checkSession().then(result => {
-      if (result) {
-        console.log("Session check successful: " + JSON.stringify(result))
-        setUser({ id: result.id, email: result.username, username: result.username })
-      }
-    }).catch(() => {
-      console.log("Session check failed")
-    })
-  }, []);
+    useEffect(() => {
+        checkSession()
+            .then((result) => {
+                if (result) {
+                    console.log("Session check successful: " + JSON.stringify(result));
+                    setUser({
+                        id: result.id,
+                        email: result.username,
+                        username: result.username,
+                    });
+                }
+            })
+            .catch(() => {
+                console.log("Session check failed");
+            });
+    }, []);
 
     // Login action handler
-  const doLogin = (newUser) => {
-    setUser({ id: newUser.id, email: newUser.username, username: newUser.username })
-    navigate('/')
-  }
+    const doLogin = (newUser) => {
+        setUser({
+            id: newUser.id,
+            email: newUser.username,
+            username: newUser.username,
+        });
+        navigate("/");
+    };
 
-  return (
-    <>
-    <UserContext.Provider value={user}>
-      <Routes>
-        <Route path='/' element={<MainLayout />}>
-          <Route index path='/' element={<Home />} />
-          <Route path='login' element={<LoginForm doLogin={doLogin} />} />
-          <Route path='logout' element={<Logout doLogin={doLogin} />} />
-          <Route path='play' element={<NewGame />} />
-          <Route path='play/:id' element={<PlayGame />} />
-        </Route>
-      </Routes>
-    </UserContext.Provider>
-    
-    </>
-  );
+    return (
+        <>
+            <UserContext.Provider value={user}>
+                <Routes>
+                    <Route path="/" element={<MainLayout />}>
+                        <Route index path="/" element={<Home />} />
+                        <Route path="login" element={<LoginForm doLogin={doLogin} />} />
+                        <Route path="logout" element={<Logout doLogin={doLogin} />} />
+                        <Route path="play" element={<NewGame />} />
+                        <Route path="play/:id" element={<PlayGame />} />
+                    </Route>
+                </Routes>
+            </UserContext.Provider>
+        </>
+    );
 }
 
 function MainLayout() {
-  return <>
-    <Header />
-    <Outlet />
-  </>
+    return (
+        <>
+            <Header />
+            <Outlet />
+        </>
+    );
 }
 
-export default App
+export default App;

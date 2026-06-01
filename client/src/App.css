@@ -29,23 +29,25 @@
 .btn-shine {
     overflow: hidden;
     position: relative;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
 }
 
 .btn-shine::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: -75%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
     animation: shine 2.4s ease-in-out infinite;
 }
 
 .btn-shine:hover {
     transform: scale(1.08);
-    box-shadow: 0 6px 22px rgba(0,0,0,0.25);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.25);
 }
 
 .btn-shine:hover::after {
@@ -53,22 +55,46 @@
 }
 
 .fab-ready::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: -75%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
     animation: shine 2.4s ease-in-out infinite;
 }
 
+@keyframes pulse-badge {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+.badge-pulse {
+    animation: pulse-badge 0.4s ease-in-out infinite;
+    display: inline-block;
+}
+
 @keyframes shine {
-    0%   { left: -75%; }
-    60%, 100% { left: 125%; }
+    0% {
+        left: -75%;
+    }
+    60%,
+    100% {
+        left: 125%;
+    }
 }
 
 @keyframes shine-fast {
-    0%   { left: -75%; }
-    100% { left: 125%; }
+    0% {
+        left: -75%;
+    }
+    100% {
+        left: 125%;
+    }
 }

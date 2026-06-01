@@ -1,20 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
-import { Badge, Card, ListGroup, Spinner } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Spinner } from "react-bootstrap";
 import { useLocation, useParams } from "react-router";
-import { getGame, getNetwork } from "../api/game";
-import { ConnectionItem, RoutePreview } from "./Metro";
-import { END_COLOR, START_COLOR } from "../models/colors";
+import { getGame, getNetwork, submitAnswer } from "../api/game";
+import PickRoute from "./PickRoute";
+import DisplayEvents from "./DisplayEvents";
+import DisplayFinishedGame from "./DisplayFinishedGame";
+import dayjs from "dayjs";
 
-const SHUFFLE_CONNECTIONS = true;
-
-function fisherYates(arr) {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-}
+const GAME_DURATION = 90;
 
 export default function PlayGame() {
     const { id } = useParams();
@@ -23,97 +16,80 @@ export default function PlayGame() {
     const [game, setGame] = useState(state?.game ?? null);
     const [network, setNetwork] = useState(state?.network ?? null);
     const [error, setError] = useState(null);
-    const [selected, setSelected] = useState([]);
 
-    // this will only run on mount, its dependencies are guaranteed to be stable
+    const [gameStateIndex, setGameStateIndex] = useState(0); //  ["pick_route", "show_events", "show_results"]
+    const [result, setResult] = useState(null);
+
+    // this will only run on mount
     // the pourpose of this is to fetch the game and network if we don't have them from the location state (e.g. user refreshes the page or navigates with url)
     // despite this not being esplicitly required by the exam text its still very useful for debugging
     useEffect(() => {
-        Promise.all([
-            game ? Promise.resolve(game) : getGame(id),
-            network ? Promise.resolve(network) : getNetwork(),
-        ])
-            .then(([g, n]) => { setGame(g); setNetwork(n); })
+        console.log(game);
+        Promise.all([game ? Promise.resolve(game) : getGame(id), network ? Promise.resolve(network) : getNetwork()])
+            .then(([g, n]) => {
+                console.log("Got game from server:", g);
+                setGame(g);
+                setNetwork(n);
+                if (g.answer || dayjs().unix() - g.startTime >= GAME_DURATION) {
+                    console.log("redirecting to results");
+                    setResult({
+                        // this is temporary untill the proper animations are done
+                        status: g.status,
+                        coins: g.coins,
+                        happenedEvents: [],
+                        answer: g.answer,
+                    });
+                    setGameStateIndex(2);
+                }
+            })
             .catch((e) => setError(e.message));
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const displayConnections = useMemo(() => {
-        if (!network) return [];
-        return SHUFFLE_CONNECTIONS ? fisherYates(network.connections) : network.connections;
-    }, [network]);
+    const handleSubmit = (selected) => {
+        if (result) return;
+        submitAnswer(
+            game.id,
+            selected.map((c) => c.id),
+        )
+            .then((res) => {
+                setResult(res);
+                setGameStateIndex(res.status === "won" ? 1 : 2);
+            })
+            .catch((e) => setError(e.message));
+    };
 
     if (error) return <div className="container py-4 alert alert-danger">{error}</div>;
-    if (!game || !network) return <div className="text-center py-5"><Spinner animation="border" /></div>;
-
-    const toggle = (conn) =>
-        setSelected((prev) =>
-            prev.find((c) => c.id === conn.id)
-                ? prev.filter((c) => c.id !== conn.id)
-                : [...prev, conn]
+    if (!game || !network)
+        return (
+            <div className="text-center py-5">
+                <Spinner animation="border" />
+            </div>
         );
+    if (gameStateIndex == 0) {
+        return (
+            <PickRoute
+                game={game}
+                network={network}
+                gameDuration={GAME_DURATION}
+                handleSubmit={handleSubmit}
+                shuffleConnections={true}
+            />
+        );
+    }
 
-    return (
-        <div className="container-fluid py-4">
-            <div className="d-flex align-items-center gap-3 mb-3">
-                <h4 className="mb-0">Game #{game.id}</h4>
-                <RoutePreview startStation={game.startStation} endStation={game.endStation} colors={[START_COLOR, END_COLOR]}/>
-                <Badge bg="warning" text="dark">Coins: {game.coins}</Badge>
-            </div>
+    if (gameStateIndex == 1) {
+        return (
+            <DisplayEvents
+                events={result.happenedEvents}
+                connections={result.answer.map((id) => network.connections.find((c) => c.id === id))}
+                startCoins={game.coins}
+                setStateIndex={setGameStateIndex}
+            />
+        );
+    }
+    if (gameStateIndex == 2) {
+        return <DisplayFinishedGame result={result} />;
+    }
 
-            <div className="row g-3" style={{ height: "75vh" }}>
-                {/* Left: selected route */}
-                <div className="col-4 d-flex flex-column">
-                    <Card className="flex-grow-1 overflow-hidden d-flex flex-column">
-                        <Card.Header className="fw-bold">Your Route</Card.Header>
-                        <ListGroup variant="flush" className="overflow-auto flex-grow-1">
-                            {selected.length === 0 ? (
-                                <ListGroup.Item className="text-muted fst-italic">
-                                    Click connections to add them
-                                </ListGroup.Item>
-                            ) : (
-                                selected.map((conn) => 
-                                    <ConnectionItem key={conn.id} conn={conn} onRemove={toggle} startStation={game.startStation} endStation={game.endStation} />
-                                ))
-                            }
-                        </ListGroup>
-                    </Card>
-                </div>
-
-                {/* Middle: all connections */}
-                <div className="col-5 d-flex flex-column">
-                    <Card className="flex-grow-1 overflow-hidden d-flex flex-column">
-                        <Card.Header className="fw-bold">Connections</Card.Header>
-                        <ListGroup variant="flush" className="overflow-auto flex-grow-1">
-                            {displayConnections.map((conn) => {
-                                const isSelected = !!selected.find((c) => c.id === conn.id);
-                                return (
-                                    <ConnectionItem key={conn.id} conn={conn} selected={isSelected} onClick={() => toggle(conn)} startStation={game.startStation} endStation={game.endStation} />
-                                );
-                            })}
-                        </ListGroup>
-                    </Card>
-                </div>
-
-                {/* Right: all stations */}
-                <div className="col-3 d-flex flex-column">
-                    <Card className="flex-grow-1 overflow-hidden d-flex flex-column">
-                        <Card.Header className="fw-bold">Stations</Card.Header>
-                        <ListGroup variant="flush" className="overflow-auto flex-grow-1">
-                            {network.stations.sort().map((station) => (
-                                <ListGroup.Item key={station} className="d-flex align-items-center gap-2">
-                                    <span className={station === game.startStation || station === game.endStation ? "fw-semibold" : ""}
-                                          style={station === game.startStation ? { color: "#fd7e14" } : station === game.endStation ? { color: "#6f42c1" } : {}}
-                                    >
-                                        {station}
-                                    </span>
-                                    {station === game.startStation && <Badge bg="" style={{ backgroundColor: "#fd7e14" }}>Start</Badge>}
-                                    {station === game.endStation && <Badge bg="" style={{ backgroundColor: "#6f42c1" }}>End</Badge>}
-                                </ListGroup.Item>
-                            ))}
-                        </ListGroup>
-                    </Card>
-                </div>
-            </div>
-        </div>
-    );
+    return null;
 }
