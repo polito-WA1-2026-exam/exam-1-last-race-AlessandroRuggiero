@@ -15,6 +15,7 @@ export async function getNetwork() {
 }
 
 export async function getGame(id) {
+    console.log("Fetching game with id:", id);
     const response = await fetch(`${baseUrl}/games/${id}`, {
         credentials: "include",
     });

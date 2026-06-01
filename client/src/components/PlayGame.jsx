@@ -24,10 +24,10 @@ export default function PlayGame() {
     // the pourpose of this is to fetch the game and network if we don't have them from the location state (e.g. user refreshes the page or navigates with url)
     // despite this not being esplicitly required by the exam text its still very useful for debugging
     useEffect(() => {
+        window.history.replaceState({}, ""); // clear the location state to avoid using stale data if the user navigates back to this page after finishing a game
         console.log(game);
         Promise.all([game ? Promise.resolve(game) : getGame(id), network ? Promise.resolve(network) : getNetwork()])
             .then(([g, n]) => {
-                console.log("Got game from server:", g);
                 setGame(g);
                 setNetwork(n);
                 if (g.answer || dayjs().unix() - g.startTime >= GAME_DURATION) {
