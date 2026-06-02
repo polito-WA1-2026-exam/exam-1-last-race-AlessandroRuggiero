@@ -1,6 +1,9 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router";
+import { Button, Container, Row, Col } from "react-bootstrap";
 import UserContext from "../contexts/UserContext";
+import { MetroDot, MetroConnector, MetroStop } from "./Metro";
+import { PURPLE } from "../models/colors";
 
 function PlayButton() {
     const navigate = useNavigate();
@@ -8,56 +11,103 @@ function PlayButton() {
 
     if (!user.id)
         return (
-            <button className="btn btn-warning fw-bold" onClick={() => navigate("/login")}>
+            <Button
+                className="fw-bold w-100"
+                style={{ backgroundColor: PURPLE, borderColor: PURPLE }}
+                onClick={() => navigate("/login")}
+            >
                 Log in to Play
-            </button>
+            </Button>
         );
 
     return (
-        <button className="btn btn-primary" onClick={() => navigate("/play")}>
-            Play
-        </button>
+        <Button
+            className="fw-bold w-100"
+            style={{ backgroundColor: PURPLE, borderColor: PURPLE }}
+            onClick={() => navigate("/play")}
+        >
+            Start a game
+        </Button>
     );
 }
 
 export default function Home() {
     return (
-        <div className="container py-4">
-            <h2>How to play</h2>
-            <h5 className="mt-3">1. Setup</h5>
-            <p>
-                View the full network map — all stations, connections, and lines. When ready, proceed to the next phase.
-            </p>
-            <h5>2. Planning</h5>
-            <p>You'll see:</p>
-            <ul>
-                <li>The network map showing station names only (no lines).</li>
-                <li>A randomly assigned start and destination (at least 3 stops apart).</li>
-                <li>
-                    The full list of segments, e.g. <em>Porta Velaria — Fontana Oscura</em>.
-                </li>
-            </ul>
-            <p>
-                You have <strong>90 seconds</strong> to scroll the segment list, reconstruct the network, and select
-                segments in order to build your route from start to destination. Submit before time runs out — otherwise
-                the route is submitted as-is.
-            </p>
-            <p>
-                A route is valid if it starts and ends at the assigned stations and each segment follows a line (line
-                changes only at interchange stations).
-            </p>
+        <Container className="py-5">
+            <Row className="g-5 align-items-start">
+                <Col md={5}>
+                    <div className="sticky-top" style={{ top: "5rem" }}>
+                        <div className="d-flex align-items-center mb-3">
+                            <MetroDot color={PURPLE} size="lg" />
+                            <MetroConnector color={PURPLE} vertical={false} />
+                            <MetroDot color={PURPLE} size="lg" />
+                            <MetroConnector color={PURPLE} vertical={false} />
+                            <MetroDot color={PURPLE} size="lg" />
+                            <MetroConnector color={PURPLE} vertical={false} />
+                            <MetroDot color={PURPLE} size="lg" />
+                        </div>
+                        <h1 className="fw-bold mb-1" style={{ letterSpacing: "-0.02em" }}>
+                            LastRace
+                        </h1>
+                        <p className="mb-4" style={{ color: PURPLE, fontSize: "0.95rem", letterSpacing: "0.04em" }}>
+                            Tunnelbana edition
+                        </p>
+                        <p className="text-muted mb-4">
+                            A memory game set on Stockholm's Tunnelbana. Study the network, plan your route, then
+                            navigate it blind under time pressure. Random events will push your coins up or down at
+                            every station.
+                        </p>
+                        <PlayButton />
+                    </div>
+                </Col>
 
-            <h5>3. Execution</h5>
-            <p>
-                Each segment of your route triggers a random event that adds or removes coins. Steps are revealed one at
-                a time. An invalid or incomplete route skips this phase and costs you all 20 coins (score: 0).
-            </p>
+                <Col md={7}>
+                    <p
+                        className="fw-semibold mb-4"
+                        style={{ color: PURPLE, fontSize: "0.75rem", letterSpacing: "0.14em" }}
+                    >
+                        HOW TO PLAY
+                    </p>
 
-            <h5>4. Result</h5>
-            <p>Your final score is your remaining coins (minimum 0). You can then start a new game.</p>
-            <div className="text-center mt-4">
-                <PlayButton />
-            </div>
-        </div>
+                    <MetroStop num="1" title="Study the network" isLast={false}>
+                        <p className="text-muted">
+                            The full Tunnelbana network is displayed. Every line, every station, every connection.
+                            Memorise it and then, when you feel ready, move to the next phase.
+                        </p>
+                    </MetroStop>
+
+                    <MetroStop num="2" title="Plan your route" isLast={false}>
+                        <p className="text-muted">
+                            The lines disappear. You see only station names, a randomly assigned <strong>start</strong>{" "}
+                            and <strong>destination</strong> (at least 3 stops apart), and a shuffled list of connected
+                            station pairs.
+                        </p>
+                        <p className="text-muted">
+                            You have <strong>90 seconds</strong> to mentally reconstruct the network and select the
+                            segments that form your route in order, from start to destination. When the time is up
+                            whatever you've built so far gets submitted.
+                        </p>
+                        <p className="text-muted">
+                            A valid route follows real lines and only switches lines at interchange stations.
+                        </p>
+                    </MetroStop>
+
+                    <MetroStop num="3" title="Ride your Route" isLast={false}>
+                        <p className="text-muted">If your route is invalid or incomplete, you lose all 20 coins.</p>
+                        <p className="text-muted">
+                            Otherwise, each segment triggers a random event: a bonus, a delay, a surprise. Coins are
+                            added or deducted, revealed one stop at a time.
+                        </p>
+                    </MetroStop>
+
+                    <MetroStop num="4" title="See your score" isLast={true}>
+                        <p className="text-muted">
+                            Your final score is the coins you have left (never below zero). Compete with other players
+                            for a spot on the leaderboard, or just try to outdo yourself.
+                        </p>
+                    </MetroStop>
+                </Col>
+            </Row>
+        </Container>
     );
 }

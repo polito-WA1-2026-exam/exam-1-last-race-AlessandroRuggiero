@@ -13,5 +13,6 @@ export const LINE_VARIANTS = {
 };
 
 export const GREY = "#adb5bd";
+export const PURPLE = "#6f42c1";
 export const START_COLOR = "#fd7e14";
-export const END_COLOR = "#6f42c1";
+export const END_COLOR = PURPLE;
