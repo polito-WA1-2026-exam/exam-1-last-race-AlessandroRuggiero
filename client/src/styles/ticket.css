@@ -1,0 +1,144 @@
+/* CONCEPT FOR THE TICKET STILL NOT FINAL */
+
+.display-font {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+
+.mono {
+    font-family: "SFMono-Regular", Consolas, monospace;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+}
+
+
+.btn-lr {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #6f42c1;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.65rem 1.4rem;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.15s, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-lr:hover {
+    background-color: #5a32a3;
+    transform: translateY(-1px);
+}
+
+
+.slot-reel {
+    overflow: hidden;
+    height: 1.4em;
+    min-width: 200px;
+}
+
+.slot-strip {
+    display: flex;
+    flex-direction: column;
+    animation: slot-wheel 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.slot-item {
+    height: 1.4em;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+@keyframes slot-wheel {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-1.4em); }
+}
+
+.modal-ticket {
+    max-width: 780px;
+}
+
+
+.ticket-full {
+    display: flex;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.12);
+}
+
+.ticket-left {
+    background: #1e1b2e;
+    color: white;
+    padding: 1.4rem 1.25rem;
+    min-width: 155px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.ticket-boarding-label {
+    color: #f59e0b;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    margin-bottom: 0.4rem;
+}
+
+.ticket-brand {
+    font-size: 1.55rem;
+    color: white;
+}
+
+.ticket-edition {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.45);
+    letter-spacing: 0.06em;
+    margin-top: 0.2rem;
+}
+
+.ticket-info-row {
+    display: flex;
+    gap: 1.4rem;
+}
+
+.ticket-info-label {
+    color: #666;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.2rem;
+}
+
+.ticket-coins-value {
+    color: #f59e0b;
+    font-size: 1.3rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.ticket-coins-unit {
+    font-size: 0.7rem;
+    font-weight: 600;
+    opacity: 0.75;
+}
+
+.ticket-seat-value {
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+
+/* Right white panel */
+.ticket-right {
+    background: white;
+    padding: 1.25rem 1.5rem;
+    flex: 1;
+}

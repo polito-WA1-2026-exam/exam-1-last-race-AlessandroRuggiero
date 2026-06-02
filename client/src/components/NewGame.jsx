@@ -6,6 +6,9 @@ import { LINE_COLORS, LINE_VARIANTS } from "../models/colors";
 import { MetroDot, MetroConnector } from "./Metro";
 import { getOrderedLines } from "../models/network";
 import { Badge } from "react-bootstrap";
+import { TicketFull } from "./Ticket";
+import { START_COLOR, END_COLOR } from "../models/colors";
+import "../styles/ticket.css";
 
 export function MetroLine({ lineName, stations, stationLines }) {
     const color = LINE_COLORS[lineName] ?? "#6c757d";
@@ -79,7 +82,7 @@ export default function NewGame() {
             .catch((e) => setError(e.message));
     }, []);
 
-    const handleStart = () =>
+    const handleBoard = () =>
         createGame()
             .then((game) => navigate(`/play/${game.id}`, { state: { game, network } }))
             .catch((e) => setError(e.message));
@@ -99,37 +102,23 @@ export default function NewGame() {
                     <Button size="lg" onClick={() => setReadyPopup(true)} className="fab-ready">
                         Ready
                     </Button>
-                    <Modal show={readyPopup} onHide={() => setReadyPopup(false)} centered>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Are you ready?</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            Once you start, the <strong>90-second</strong> planning timer begins immediately.
+                    <Modal
+                        show={readyPopup}
+                        onHide={() => setReadyPopup(false)}
+                        centered
+                        dialogClassName="modal-ticket"
+                        contentClassName="bg-transparent border-0 shadow-none"
+                    >
+                        <Modal.Body className="p-0">
+                            <TicketFull
+                                stations={[...new Set(network.connections.flatMap((c) => [c.station1, c.station2]))]}
+                                fromColor={START_COLOR}
+                                toColor={END_COLOR}
+                                coins={20}
+                                onBoard={handleBoard}
+                                onClose={() => setReadyPopup(false)}
+                            />
                         </Modal.Body>
-                        <Modal.Footer>
-                            <Button
-                                variant="link"
-                                onClick={() => setReadyPopup(false)}
-                                style={{
-                                    textDecoration: "none",
-                                    color: "inherit",
-                                }}
-                            >
-                                Not yet
-                            </Button>
-                            <Button
-                                variant=""
-                                className="btn-shine"
-                                style={{
-                                    backgroundColor: "#6f42c1",
-                                    borderColor: "#6f42c1",
-                                    color: "white",
-                                }}
-                                onClick={handleStart}
-                            >
-                                Let's go!
-                            </Button>
-                        </Modal.Footer>
                     </Modal>
                 </>
             )}
