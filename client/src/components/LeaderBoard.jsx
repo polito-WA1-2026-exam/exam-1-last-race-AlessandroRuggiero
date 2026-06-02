@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Table, Badge, Spinner, Alert, OverlayTrigger, Popover } from "react-bootstrap";
+import { Container, Table, Badge, Spinner, Alert, OverlayTrigger, Popover } from "react-bootstrap";
 import dayjs from "dayjs";
 import { getLeaderboard, getNetwork } from "../api/game";
 import { RoutePreview, MetroDot, MetroConnector } from "./Metro";
-import { START_COLOR, END_COLOR, GREY } from "../models/colors";
+import { START_COLOR, END_COLOR, GREY, PURPLE } from "../models/colors";
 
 const MEDAL = ["🥇", "🥈", "🥉"];
 
@@ -59,9 +59,7 @@ function StopsPopover({ entry, network, ...props }) {
                             </div>
                             <span
                                 className="metro-label fw-semibold"
-                                style={{
-                                    color: dotColor(i) !== GREY ? dotColor(i) : undefined,
-                                }}
+                                style={{ color: dotColor(i) !== GREY ? dotColor(i) : undefined }}
                             >
                                 {station}
                             </span>
@@ -92,17 +90,29 @@ export default function LeaderBoard() {
     if (loading)
         return (
             <div className="text-center py-5">
-                <Spinner animation="border" />
+                <Spinner animation="border" style={{ color: PURPLE }} />
             </div>
         );
 
     if (error) return <Alert variant="danger">{error}</Alert>;
 
     return (
-        <div className="container py-4">
-            <h2 className="mb-4">Leaderboard</h2>
-            <Table striped hover responsive>
-                <thead className="table-dark">
+        <Container className="py-5">
+            <div className="d-flex align-items-center mb-3">
+                <MetroDot color={PURPLE} size="lg" />
+                <MetroConnector color={PURPLE} vertical={false} />
+                <MetroDot color={PURPLE} size="lg" />
+                <MetroConnector color={PURPLE} vertical={false} />
+                <MetroDot color={PURPLE} size="lg" />
+                <MetroConnector color={PURPLE} vertical={false} />
+                <MetroDot color={PURPLE} size="lg" />
+            </div>
+            <h1 className="fw-bold mb-4" style={{ letterSpacing: "-0.02em" }}>
+                Leaderboard
+            </h1>
+            <div className="rounded-3 overflow-hidden border">
+            <Table hover responsive className="mb-0">
+                <thead style={{ "--bs-table-bg": "#f0f0f0" }}>
                     <tr>
                         <th>#</th>
                         <th>Player</th>
@@ -115,9 +125,9 @@ export default function LeaderBoard() {
                 <tbody>
                     {entries.map((entry, i) => (
                         <tr key={entry.userId}>
-                            <td className="fw-bold">{MEDAL[i] ?? i + 1}</td>
-                            <td className="fw-semibold">{entry.username}</td>
-                            <td>
+                            <td className="fw-bold align-middle">{MEDAL[i] ?? i + 1}</td>
+                            <td className="fw-semibold align-middle">{entry.username}</td>
+                            <td className="align-middle">
                                 <OverlayTrigger
                                     trigger={["hover", "focus"]}
                                     placement="right"
@@ -136,7 +146,7 @@ export default function LeaderBoard() {
                             <td className="text-muted small align-middle">
                                 {Math.floor(entry.endTime - entry.startTime)}s
                             </td>
-                            <td className="text-end">
+                            <td className="text-end align-middle">
                                 <Badge bg="warning" text="dark" pill>
                                     {entry.coins}
                                 </Badge>
@@ -152,6 +162,7 @@ export default function LeaderBoard() {
                     )}
                 </tbody>
             </Table>
-        </div>
+            </div>
+        </Container>
     );
 }
