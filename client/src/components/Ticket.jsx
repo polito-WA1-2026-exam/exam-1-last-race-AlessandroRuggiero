@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
 import { MetroDot, MetroConnector } from "./Metro";
 import { GREY } from "../models/colors";
 
@@ -28,7 +27,18 @@ function SlotStation({ stations, offset = 0 }) {
     );
 }
 
-export function TicketFull({ stations, fromColor, toColor, coins, onBoard, onClose }) {
+export function TicketFull({
+    children,
+    stations,
+    fromColor,
+    toColor,
+    coins,
+    startStation,
+    endStation,
+    displayMessage,
+}) {
+    const showStaticStations = startStation != null && endStation != null;
+
     return (
         <div className="ticket-full">
             <div className="ticket-left">
@@ -52,8 +62,14 @@ export function TicketFull({ stations, fromColor, toColor, coins, onBoard, onClo
             </div>
             <div className="ticket-right">
                 <RouteHeader
-                    from={<SlotStation stations={stations} offset={0} />}
-                    to={<SlotStation stations={stations} offset={Math.floor(stations.length / 2)} />}
+                    from={showStaticStations ? startStation : <SlotStation stations={stations} offset={0} />}
+                    to={
+                        showStaticStations ? (
+                            endStation
+                        ) : (
+                            <SlotStation stations={stations} offset={Math.floor(stations.length / 2)} />
+                        )
+                    }
                     fromColor={fromColor}
                     toColor={toColor}
                 />
@@ -69,25 +85,9 @@ export function TicketFull({ stations, fromColor, toColor, coins, onBoard, onClo
                     <MetroDot color={toColor} />
                 </div>
                 <p className="text-muted mt-2 mb-0" style={{ fontSize: "0.83rem" }}>
-                    The 90-second timer starts as soon as you board. The lines disappear and you will need to
-                    reconstruct the network from memory and select your route.
+                    {displayMessage}
                 </p>
-                <div className="d-flex justify-content-end align-items-center gap-3 mt-3">
-                    {onClose && (
-                        <Button
-                            variant="link"
-                            onClick={onClose}
-                            className="text-decoration-none"
-                            style={{ color: "#aaa", fontSize: "0.88rem", padding: 0 }}
-                        >
-                            Not yet
-                        </Button>
-                    )}
-                    <button className="btn-lr btn-shine" onClick={onBoard} style={{ width: "auto" }}>
-                        {/* not a bootstrap button because it would inject styles */}
-                        <i className="bi bi-play-fill me-1" /> Board now
-                    </button>
-                </div>
+                {children}
             </div>
         </div>
     );
@@ -95,8 +95,8 @@ export function TicketFull({ stations, fromColor, toColor, coins, onBoard, onClo
 
 export function RouteHeader({ from, to, fromColor, toColor }) {
     return (
-        <div className="d-flex justify-content-between mb-3">
-            <div>
+        <div className="d-flex align-items-center mb-3">
+            <div style={{ flex: 1 }}>
                 <div className="mono text-secondary" style={{ fontSize: ".7rem", letterSpacing: ".1em" }}>
                     FROM
                 </div>
@@ -105,9 +105,9 @@ export function RouteHeader({ from, to, fromColor, toColor }) {
                 </div>
             </div>
 
-            <i className="bi bi-arrow-right align-self-center fs-3 text-secondary" />
+            <i className="bi bi-arrow-right flex-shrink-0 mx-2 fs-3 text-secondary" />
 
-            <div className="text-end">
+            <div className="text-end" style={{ flex: 1 }}>
                 <div className="mono text-secondary" style={{ fontSize: ".7rem", letterSpacing: ".1em" }}>
                     TO
                 </div>

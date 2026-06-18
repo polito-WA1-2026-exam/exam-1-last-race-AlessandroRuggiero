@@ -1,74 +1,11 @@
 import { useEffect, useState } from "react";
-import { Button, Modal, Spinner } from "react-bootstrap";
+import { Modal, Spinner, Image } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import { createGame, getNetwork } from "../api/game";
-import { LINE_COLORS, LINE_VARIANTS } from "../models/colors";
-import { MetroDot, MetroConnector } from "./Metro";
-import { getOrderedLines } from "../models/network";
-import { Badge } from "react-bootstrap";
 import { TicketFull } from "./Ticket";
 import { START_COLOR, END_COLOR } from "../models/colors";
 import "../styles/ticket.css";
-
-export function MetroLine({ lineName, stations, stationLines }) {
-    const color = LINE_COLORS[lineName] ?? "#6c757d";
-    const variant = LINE_VARIANTS[lineName] ?? "secondary";
-
-    return (
-        <div className="mb-4">
-            <Badge bg={variant} className="mb-2">
-                {lineName} Line
-            </Badge>
-            <div className="metro-line-col">
-                {stations.map((station, i) => {
-                    const otherLines = (stationLines.get(station) ?? []).filter((l) => l !== lineName);
-                    return (
-                        <div key={station} className="metro-station">
-                            <div className="metro-track">
-                                {i > 0 && <MetroConnector color={color} vertical={true} />}
-                                <MetroDot color={color} />
-                                {i < stations.length - 1 && <MetroConnector color={color} vertical={true} />}
-                            </div>
-                            <div className="metro-label text-muted">
-                                {station}
-                                {otherLines.map((l) => (
-                                    <Badge
-                                        key={l}
-                                        bg={LINE_VARIANTS[l] ?? "secondary"}
-                                        className="ms-1"
-                                        style={{ fontSize: "0.75rem" }}
-                                    >
-                                        {l}
-                                    </Badge>
-                                ))}
-                            </div>
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
-    );
-}
-
-export function NetworkDisplay({ network }) {
-    const orderedLines = getOrderedLines(network);
-
-    const stationLines = new Map();
-    for (const [line, stations] of orderedLines) {
-        for (const s of stations) {
-            if (!stationLines.has(s)) stationLines.set(s, []);
-            stationLines.get(s).push(line);
-        }
-    }
-
-    return (
-        <div className="d-flex gap-4 flex-wrap">
-            {[...orderedLines.entries()].map(([line, stations]) => (
-                <MetroLine key={line} lineName={line} stations={stations} stationLines={stationLines} />
-            ))}
-        </div>
-    );
-}
 
 export default function NewGame() {
     const [network, setNetwork] = useState(null);
@@ -98,10 +35,26 @@ export default function NewGame() {
             )}
             {network && (
                 <>
-                    <NetworkDisplay network={network} />
-                    <Button size="lg" onClick={() => setReadyPopup(true)} className="fab-ready">
-                        Ready
-                    </Button>
+                    <div className="mb-4 text-center">
+                        <Image
+                            src="/future-metro-map-Stockholm-1.png"
+                            alt="Metro Map"
+                            fluid
+                            rounded
+                            className="shadow"
+                            style={{ maxHeight: "60vh" }}
+                        />
+                    </div>
+                    <div className="d-flex justify-content-center">
+                        <button
+                            className="btn-lr btn-shine"
+                            onClick={() => setReadyPopup(true)}
+                            style={{ width: "auto" }}
+                        >
+                            {/* not a bootstrap button because it would inject styles */}
+                            Ready
+                        </button>
+                    </div>
                     <Modal
                         show={readyPopup}
                         onHide={() => setReadyPopup(false)}
@@ -115,9 +68,27 @@ export default function NewGame() {
                                 fromColor={START_COLOR}
                                 toColor={END_COLOR}
                                 coins={20}
-                                onBoard={handleBoard}
-                                onClose={() => setReadyPopup(false)}
-                            />
+                                displayMessage="The 90-second timer starts as soon as you board. The lines disappear and you will need to reconstruct the network from memory and select your route."
+                            >
+                                <div className="d-flex justify-content-end align-items-center gap-3 mt-3">
+                                    <Button
+                                        variant="link"
+                                        onClick={() => setReadyPopup(false)}
+                                        className="text-decoration-none"
+                                        style={{ color: "#aaa", fontSize: "0.88rem", padding: 0 }}
+                                    >
+                                        Not yet
+                                    </Button>
+                                    <button
+                                        className="btn-lr btn-shine"
+                                        onClick={handleBoard}
+                                        style={{ width: "auto" }}
+                                    >
+                                        {/* not a bootstrap button because it would inject styles */}
+                                        Board now
+                                    </button>
+                                </div>
+                            </TicketFull>
                         </Modal.Body>
                     </Modal>
                 </>

@@ -1,8 +1,9 @@
-import { Badge, Card, ListGroup, Button } from "react-bootstrap";
+import { Badge, Card, ListGroup, Button, Image } from "react-bootstrap";
 import { useMemo, useState, useEffect } from "react";
-import { ConnectionItem, RoutePreview } from "./Metro";
+import { ConnectionItem } from "./Metro";
 import { END_COLOR, START_COLOR } from "../models/colors";
 import dayjs from "dayjs";
+import { TicketFull } from "./Ticket";
 
 function Countdown({ remaining }) {
     const bg = remaining >= 60 ? "success" : remaining > 30 ? "warning" : "danger";
@@ -22,26 +23,7 @@ function Countdown({ remaining }) {
     );
 }
 
-// ijmplementations from https://medium.com/@modos.m98/creating-a-seeded-random-string-generator-in-javascript-3165aae1c2d5
-function mulberry32(seed) {
-    return function () {
-        let t = (seed += 0x6d2b79f5);
-        t = Math.imul(t ^ (t >>> 15), t | 1);
-        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-    };
-}
-function fisherYates(arr, seed) {
-    const rand = mulberry32(seed);
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(rand() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-}
-
-export default function PickRoute({ game, network, gameDuration, handleSubmit, shuffleConnections = true }) {
+export default function PickRoute({ game, network, gameDuration, handleSubmit }) {
     const [selected, setSelected] = useState([]);
     const [remaining, setRemaining] = useState(null);
 
@@ -59,69 +41,83 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit, s
 
     const displayConnections = useMemo(() => {
         if (!network) return [];
-        return shuffleConnections ? fisherYates(network.connections, game.id) : network.connections;
-    }, [network, shuffleConnections, game.id]);
+        // sort connections by station 1 and 2 names
+        return [...network.connections].sort(
+            (a, b) => a.station1.localeCompare(b.station1) || a.station2.localeCompare(b.station2),
+        );
+    }, [network]);
 
     const toggle = (conn) =>
         setSelected((prev) =>
             prev.find((c) => c.id === conn.id) ? prev.filter((c) => c.id !== conn.id) : [...prev, conn],
         );
 
+    const moveItem = (index, direction) =>
+        setSelected((prev) => {
+            const next = [...prev];
+            const target = index + direction;
+            if (target < 0 || target >= next.length) return prev;
+            [next[index], next[target]] = [next[target], next[index]];
+            return next;
+        });
+
     return (
-        <div className="container py-4">
-            <div className="d-flex align-items-center mb-3 sticky-top bg-white py-2 shadow-sm">
-                <h4 className="mb-0">Game #{game.id}</h4>
-                <div className="flex-grow-1 d-flex justify-content-center">
-                    <div style={{ fontSize: "1.15rem" }}>
-                        <RoutePreview
-                            startStation={game.startStation}
-                            endStation={game.endStation}
-                            colors={[START_COLOR, END_COLOR]}
+        <div className="px-4 py-4">
+            <div className="row g-3" style={{ height: "75vh" }}>
+                {/* left: game ticket */}
+                <div className="col-5 d-flex flex-column">
+                    <TicketFull
+                        startStation={game.startStation}
+                        endStation={game.endStation}
+                        coins={game.coins}
+                        fromColor={START_COLOR}
+                        toColor={END_COLOR}
+                        displayMessage="Quick! Select the connections that you think connect your boarding station to your destination before the timer runs out."
+                    >
+                        <div className="d-flex justify-content-end align-items-center gap-3 mt-3">
+                            <div className="d-flex align-items-center gap-2">
+                                {remaining !== null && <Countdown remaining={remaining} />}
+                                <Button
+                                    variant="success"
+                                    size="sm"
+                                    onClick={() => handleSubmit(selected)}
+                                    //disabled={!!result}
+                                    style={{ fontWeight: 700, borderWidth: 2 }}
+                                >
+                                    Submit
+                                </Button>
+                            </div>
+                        </div>
+                    </TicketFull>
+                    <div className="mt-4">
+                        <Image
+                            src="/future-metro-map-Stockholm-1.png"
+                            alt="Metro Map"
+                            fluid
+                            rounded
+                            className="shadow"
+                            style={{ maxHeight: "60vh" }}
                         />
                     </div>
                 </div>
-                <div className="d-flex align-items-center gap-2">
-                    <Button
-                        variant="outline-secondary"
-                        size="sm"
-                        onClick={() => handleSubmit(selected)}
-                        //disabled={!!result}
-                        style={{ fontWeight: 700, borderWidth: 2 }}
-                    >
-                        Submit
-                    </Button>
-                    {remaining !== null && <Countdown remaining={remaining} />}
-                </div>
-            </div>
-            <div className="row g-3" style={{ height: "75vh" }}>
-                {/* Left: selected route */}
-                <div className="col-4 d-flex flex-column">
-                    <Card className="flex-grow-1 overflow-hidden d-flex flex-column">
-                        <Card.Header className="fw-bold">Your Route</Card.Header>
-                        <ListGroup variant="flush" className="overflow-auto flex-grow-1">
-                            {selected.length === 0 ? (
-                                <ListGroup.Item className="text-muted fst-italic">
-                                    Click connections to add them
-                                </ListGroup.Item>
-                            ) : (
-                                selected.map((conn) => (
-                                    <ConnectionItem
-                                        key={conn.id}
-                                        conn={conn}
-                                        onRemove={toggle}
-                                        startStation={game.startStation}
-                                        endStation={game.endStation}
-                                    />
-                                ))
-                            )}
-                        </ListGroup>
-                    </Card>
-                </div>
-
                 {/* Middle: all connections */}
-                <div className="col-5 d-flex flex-column">
-                    <Card className="flex-grow-1 overflow-hidden d-flex flex-column">
-                        <Card.Header className="fw-bold">Connections</Card.Header>
+                <div className="col-4 d-flex flex-column">
+                    <Card
+                        className="flex-grow-1 overflow-hidden d-flex flex-column border-0"
+                        style={{ boxShadow: "0 6px 28px rgba(0,0,0,0.10)", borderRadius: 16 }}
+                    >
+                        <Card.Header
+                            className="mono py-2 px-3"
+                            style={{
+                                background: "white",
+                                fontSize: "0.68rem",
+                                letterSpacing: "0.12em",
+                                color: "#1e1b2e",
+                                borderBottom: "2px solid #6f42c1",
+                            }}
+                        >
+                            Connections
+                        </Card.Header>
                         <ListGroup variant="flush" className="overflow-auto flex-grow-1">
                             {displayConnections.map((conn) => {
                                 const isSelected = !!selected.find((c) => c.id === conn.id);
@@ -140,51 +136,45 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit, s
                     </Card>
                 </div>
 
-                {/* Right: all stations */}
+                {/* Right: selected route */}
                 <div className="col-3 d-flex flex-column">
-                    <Card className="flex-grow-1 overflow-hidden d-flex flex-column">
-                        <Card.Header className="fw-bold">Stations</Card.Header>
+                    <Card
+                        className="flex-grow-1 overflow-hidden d-flex flex-column border-0"
+                        style={{ boxShadow: "0 6px 28px rgba(0,0,0,0.10)", borderRadius: 16 }}
+                    >
+                        <Card.Header
+                            className="mono py-2 px-3"
+                            style={{
+                                background: "white",
+                                fontSize: "0.68rem",
+                                letterSpacing: "0.12em",
+                                color: "#1e1b2e",
+                                borderBottom: "2px solid #6f42c1",
+                            }}
+                        >
+                            Your Route
+                        </Card.Header>
                         <ListGroup variant="flush" className="overflow-auto flex-grow-1">
-                            {network.stations.sort().map((station) => (
-                                <ListGroup.Item key={station} className="d-flex align-items-center gap-2">
-                                    <span
-                                        className={
-                                            station === game.startStation || station === game.endStation
-                                                ? "fw-semibold"
-                                                : ""
-                                        }
-                                        style={
-                                            station === game.startStation
-                                                ? { color: "#fd7e14" }
-                                                : station === game.endStation
-                                                  ? { color: "#6f42c1" }
-                                                  : {}
-                                        }
-                                    >
-                                        {station}
-                                    </span>
-                                    {station === game.startStation && (
-                                        <Badge
-                                            bg=""
-                                            style={{
-                                                backgroundColor: "#fd7e14",
-                                            }}
-                                        >
-                                            Start
-                                        </Badge>
-                                    )}
-                                    {station === game.endStation && (
-                                        <Badge
-                                            bg=""
-                                            style={{
-                                                backgroundColor: "#6f42c1",
-                                            }}
-                                        >
-                                            End
-                                        </Badge>
-                                    )}
+                            {selected.length === 0 ? (
+                                <ListGroup.Item
+                                    className="text-center py-4 border-0"
+                                    style={{ color: "#adb5bd", fontSize: "0.85rem" }}
+                                >
+                                    Click connections to add them
                                 </ListGroup.Item>
-                            ))}
+                            ) : (
+                                selected.map((conn, i) => (
+                                    <ConnectionItem
+                                        key={conn.id}
+                                        conn={conn}
+                                        onRemove={toggle}
+                                        onMoveUp={i > 0 ? () => moveItem(i, -1) : null}
+                                        onMoveDown={i < selected.length - 1 ? () => moveItem(i, 1) : null}
+                                        startStation={game.startStation}
+                                        endStation={game.endStation}
+                                    />
+                                ))
+                            )}
                         </ListGroup>
                     </Card>
                 </div>
