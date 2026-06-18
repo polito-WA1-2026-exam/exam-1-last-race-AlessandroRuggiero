@@ -52,7 +52,7 @@ export default function NewGame() {
                             style={{ width: "auto" }}
                         >
                             {/* not a bootstrap button because it would inject styles */}
-                            <i className="bi bi-play-fill me-1" /> Ready
+                            Ready
                         </button>
                     </div>
                     <Modal
@@ -85,7 +85,7 @@ export default function NewGame() {
                                         style={{ width: "auto" }}
                                     >
                                         {/* not a bootstrap button because it would inject styles */}
-                                        <i className="bi bi-play-fill me-1" /> Board now
+                                        Board now
                                     </button>
                                 </div>
                             </TicketFull>

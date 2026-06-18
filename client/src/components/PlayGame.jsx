@@ -66,15 +66,7 @@ export default function PlayGame() {
             </div>
         );
     if (gameStateIndex == 0) {
-        return (
-            <PickRoute
-                game={game}
-                network={network}
-                gameDuration={GAME_DURATION}
-                handleSubmit={handleSubmit}
-                shuffleConnections={true}
-            />
-        );
+        return <PickRoute game={game} network={network} gameDuration={GAME_DURATION} handleSubmit={handleSubmit} />;
     }
 
     if (gameStateIndex == 1) {

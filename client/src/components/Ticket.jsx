@@ -95,8 +95,8 @@ export function TicketFull({
 
 export function RouteHeader({ from, to, fromColor, toColor }) {
     return (
-        <div className="d-flex justify-content-between mb-3">
-            <div>
+        <div className="d-flex align-items-center mb-3">
+            <div style={{ flex: 1 }}>
                 <div className="mono text-secondary" style={{ fontSize: ".7rem", letterSpacing: ".1em" }}>
                     FROM
                 </div>
@@ -105,9 +105,9 @@ export function RouteHeader({ from, to, fromColor, toColor }) {
                 </div>
             </div>
 
-            <i className="bi bi-arrow-right align-self-center fs-3 text-secondary" />
+            <i className="bi bi-arrow-right flex-shrink-0 mx-2 fs-3 text-secondary" />
 
-            <div className="text-end">
+            <div className="text-end" style={{ flex: 1 }}>
                 <div className="mono text-secondary" style={{ fontSize: ".7rem", letterSpacing: ".1em" }}>
                     TO
                 </div>
