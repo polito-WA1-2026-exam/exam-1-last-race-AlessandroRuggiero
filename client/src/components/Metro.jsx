@@ -23,7 +23,7 @@ export function ConnectionItem({ conn, selected, onClick, onRemove, startStation
             onClick={onClick}
             className={`d-flex justify-content-between align-items-center text-dark ${selected ? "connection-selected" : ""}`}
         >
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center text-nowrap">
                 <span className="me-2 fw-semibold">{conn.station1}</span>
                 <MetroDot color={colors[0]} />
                 <MetroConnector color={GREY} vertical={false} />
@@ -34,6 +34,7 @@ export function ConnectionItem({ conn, selected, onClick, onRemove, startStation
                 <Button
                     variant="outline-danger"
                     size="sm"
+                    className="py-0 lh-1"
                     onClick={(e) => {
                         e.stopPropagation();
                         onRemove(conn);
