@@ -35,16 +35,22 @@ export function ConnectionItem({ conn, selected, onClick, onRemove, onMoveUp, on
                     <button
                         className="btn btn-link btn-sm p-0 lh-1 text-secondary"
                         disabled={!onMoveUp}
-                        onClick={(e) => { e.stopPropagation(); onMoveUp?.(); }}
-                        style={{ fontSize: '0.7rem' }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onMoveUp?.();
+                        }}
+                        style={{ fontSize: "0.7rem" }}
                     >
                         <i className="bi bi-chevron-up" />
                     </button>
                     <button
                         className="btn btn-link btn-sm p-0 lh-1 text-secondary"
                         disabled={!onMoveDown}
-                        onClick={(e) => { e.stopPropagation(); onMoveDown?.(); }}
-                        style={{ fontSize: '0.7rem' }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onMoveDown?.();
+                        }}
+                        style={{ fontSize: "0.7rem" }}
                     >
                         <i className="bi bi-chevron-down" />
                     </button>
@@ -53,7 +59,7 @@ export function ConnectionItem({ conn, selected, onClick, onRemove, onMoveUp, on
             {onRemove && (
                 <button
                     className="btn-close ms-1 p-0 lh-1"
-                    style={{ fontSize: '0.7rem' }}
+                    style={{ fontSize: "0.7rem" }}
                     onClick={(e) => {
                         e.stopPropagation();
                         onRemove(conn);
@@ -100,6 +106,42 @@ export function RoutePreview({ startStation, endStation, colors }) {
             <span className="ms-2 fw-semibold" style={{ color: colors[1] }}>
                 {endStation}
             </span>
+        </div>
+    );
+}
+
+export function JourneyTrack({ total, current }) {
+    return (
+        <div style={{ display: "flex", alignItems: "center", gap: 0 }}>
+            {Array.from({ length: total }).map((_, i) => {
+                const done = i < current;
+                const active = i === current - 1;
+                return (
+                    <div key={i} style={{ display: "flex", alignItems: "center" }}>
+                        <div
+                            style={{
+                                width: active ? 14 : 10,
+                                height: active ? 14 : 10,
+                                borderRadius: "50%",
+                                border: `2px solid ${done ? PURPLE : GREY}`,
+                                background: done ? PURPLE : "white",
+                                transition: "all 0.3s ease",
+                                boxShadow: active ? `0 0 0 3px rgba(111,66,193,0.25)` : "none",
+                            }}
+                        />
+                        {i < total - 1 && (
+                            <div
+                                style={{
+                                    width: 28,
+                                    height: 3,
+                                    background: i < current - 1 ? PURPLE : GREY,
+                                    transition: "background 0.3s ease",
+                                }}
+                            />
+                        )}
+                    </div>
+                );
+            })}
         </div>
     );
 }

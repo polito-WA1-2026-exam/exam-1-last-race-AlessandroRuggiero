@@ -62,6 +62,7 @@ const lines = {
         //"Östbergahöjden",
         "Älvsjö",
         "Hagsätra",
+        "Gullmarsplan",
     ],
 };
 
