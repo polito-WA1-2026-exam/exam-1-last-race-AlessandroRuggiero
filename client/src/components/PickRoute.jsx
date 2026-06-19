@@ -91,7 +91,7 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
                     </TicketFull>
                     <div className="mt-4">
                         <Image
-                            src="/future-metro-map-Stockholm-1.png"
+                            src="/no_lines_test_map.jpg"
                             alt="Metro Map"
                             fluid
                             rounded

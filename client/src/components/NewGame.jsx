@@ -37,7 +37,7 @@ export default function NewGame() {
                 <>
                     <div className="mb-4 text-center">
                         <Image
-                            src="/future-metro-map-Stockholm-1.png"
+                            src="/test-map.jpg"
                             alt="Metro Map"
                             fluid
                             rounded
