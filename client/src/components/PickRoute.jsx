@@ -1,4 +1,5 @@
-import { Badge, Card, ListGroup, Button, Image } from "react-bootstrap";
+import { Badge, Card, ListGroup, Button } from "react-bootstrap";
+import { MetroMap } from "./MetroMap";
 import { useMemo, useState, useEffect } from "react";
 import { ConnectionItem } from "./Metro";
 import { END_COLOR, START_COLOR } from "../models/colors";
@@ -89,15 +90,8 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
                             </div>
                         </div>
                     </TicketFull>
-                    <div className="mt-4">
-                        <Image
-                            src="/no_lines_test_map.jpg"
-                            alt="Metro Map"
-                            fluid
-                            rounded
-                            className="shadow"
-                            style={{ maxHeight: "60vh" }}
-                        />
+                    <div className="mt-4" style={{ background: 'white', borderRadius: 16, boxShadow: '0 6px 28px rgba(0,0,0,0.10)', padding: '12px' }}>
+                        <MetroMap hideLines />
                     </div>
                 </div>
                 {/* Middle: all connections */}

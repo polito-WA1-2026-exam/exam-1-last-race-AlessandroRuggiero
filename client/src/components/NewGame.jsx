@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Modal, Spinner, Image } from "react-bootstrap";
+import { Modal, Spinner } from "react-bootstrap";
+import { MetroMap } from "./MetroMap";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import { createGame, getNetwork } from "../api/game";
@@ -35,15 +36,8 @@ export default function NewGame() {
             )}
             {network && (
                 <>
-                    <div className="mb-4 text-center">
-                        <Image
-                            src="/test-map.jpg"
-                            alt="Metro Map"
-                            fluid
-                            rounded
-                            className="shadow"
-                            style={{ maxHeight: "60vh" }}
-                        />
+                    <div className="mb-4">
+                        <MetroMap style={{ maxHeight: "60vh" }} />
                     </div>
                     <div className="d-flex justify-content-center">
                         <button
