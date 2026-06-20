@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { getLeaderboard, getNetwork } from "../api/game";
 import { useNavigate } from "react-router";
 import { RoutePreview, MetroDot, MetroConnector } from "./Metro";
-import { START_COLOR, END_COLOR, GREY, PURPLE } from "../models/colors";
+import { START_COLOR, END_COLOR, GREY, PURPLE } from "../constants/colors";
 
 const MEDAL = ["🥇", "🥈", "🥉"];
 
@@ -85,7 +85,11 @@ export default function LeaderBoard() {
                 setEntries(lb);
                 setNetwork(net);
             })
-            .catch((e) => e.message === "SESSION_EXPIRED" ? navigate("/logout", { state: { returnTo: "/login" } }) : setError("Failed to load leaderboard."))
+            .catch((e) =>
+                e.message === "SESSION_EXPIRED"
+                    ? navigate("/logout", { state: { returnTo: "/login" } })
+                    : setError("Failed to load leaderboard."),
+            )
             .finally(() => setLoading(false));
     }, [navigate]);
 

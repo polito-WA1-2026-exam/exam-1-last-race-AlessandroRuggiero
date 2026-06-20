@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import UserContext from "../contexts/UserContext";
 import { MetroDot, MetroConnector, MetroStop } from "./Metro";
-import { PURPLE } from "../models/colors";
+import { PURPLE } from "../constants/colors";
 
 function PlayButton() {
     const navigate = useNavigate();

@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { getGame, getNetwork, submitAnswer } from "../api/game";
+import { SubmitRouteResult } from "../models/submitRouteResult";
+import { GAME_DURATION } from "../constants/game";
 import PickRoute from "./PickRoute";
 import DisplayEvents from "./DisplayEvents";
 import DisplayFinishedGame from "./DisplayFinishedGame";
 import dayjs from "dayjs";
-
-const GAME_DURATION = 90;
 
 export default function PlayGame() {
     const { id } = useParams();
@@ -33,13 +33,7 @@ export default function PlayGame() {
                 setNetwork(n);
                 if (g.answer || dayjs().unix() - g.startTime >= GAME_DURATION) {
                     console.log("redirecting to results");
-                    setResult({
-                        // this is temporary untill the proper animations are done
-                        status: g.status,
-                        coins: g.coins,
-                        happenedEvents: [],
-                        answer: g.answer,
-                    });
+                    setResult(new SubmitRouteResult(g.status, g.coins, [], g.answer));
                     setGameStateIndex(2);
                 }
             })

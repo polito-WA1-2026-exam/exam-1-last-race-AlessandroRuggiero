@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { MetroDot, MetroConnector } from "./Metro";
-import { GREY } from "../models/colors";
+import { GREY } from "../constants/colors";
 
 function SlotStation({ stations, offset = 0 }) {
     const [index, setIndex] = useState(offset % stations.length);

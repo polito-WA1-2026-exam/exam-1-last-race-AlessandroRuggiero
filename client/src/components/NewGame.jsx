@@ -5,7 +5,8 @@ import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import { createGame, getNetwork } from "../api/game";
 import { TicketFull } from "./Ticket";
-import { START_COLOR, END_COLOR } from "../models/colors";
+import { START_COLOR, END_COLOR } from "../constants/colors";
+import { STARTING_COINS } from "../constants/game";
 import "../styles/ticket.css";
 
 export default function NewGame() {
@@ -14,12 +15,17 @@ export default function NewGame() {
     const [readyPopup, setReadyPopup] = useState(false);
     const navigate = useNavigate();
 
-    const onError = (e) => e.message === "SESSION_EXPIRED" ? navigate("/logout", { state: { returnTo: "/login" } }) : setError(e.message);
+    const onError = (e) =>
+        e.message === "SESSION_EXPIRED" ? navigate("/logout", { state: { returnTo: "/login" } }) : setError(e.message);
 
     useEffect(() => {
         getNetwork()
             .then(setNetwork)
-            .catch((e) => e.message === "SESSION_EXPIRED" ? navigate("/logout", { state: { returnTo: "/login" } }) : setError(e.message));
+            .catch((e) =>
+                e.message === "SESSION_EXPIRED"
+                    ? navigate("/logout", { state: { returnTo: "/login" } })
+                    : setError(e.message),
+            );
     }, [navigate]);
 
     const handleBoard = () =>
@@ -63,7 +69,7 @@ export default function NewGame() {
                                 stations={[...new Set(network.connections.flatMap((c) => [c.station1, c.station2]))]}
                                 fromColor={START_COLOR}
                                 toColor={END_COLOR}
-                                coins={20}
+                                coins={STARTING_COINS}
                                 displayMessage="The 90-second timer starts as soon as you board. The lines disappear and you will need to reconstruct the network from memory and select your route."
                             >
                                 <div className="d-flex justify-content-end align-items-center gap-3 mt-3">

@@ -1,7 +1,7 @@
 import { ListGroup } from "react-bootstrap";
 
 import "../styles/metro.css";
-import { GREY, PURPLE, START_COLOR, END_COLOR } from "../models/colors";
+import { GREY, PURPLE, START_COLOR, END_COLOR } from "../constants/colors";
 
 export function MetroDot({ color, size }) {
     const cls = size === "lg" ? "metro-dot metro-dot-lg" : "metro-dot";

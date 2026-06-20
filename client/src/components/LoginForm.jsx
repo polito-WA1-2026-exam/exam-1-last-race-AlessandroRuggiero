@@ -3,7 +3,7 @@ import { doLogin, doLogout } from "../api/auth";
 import { useNavigate, useLocation } from "react-router";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { MetroDot, MetroConnector } from "./Metro";
-import { PURPLE } from "../models/colors";
+import { PURPLE } from "../constants/colors";
 
 function LoginForm(props) {
     const [username, setUsername] = useState("");

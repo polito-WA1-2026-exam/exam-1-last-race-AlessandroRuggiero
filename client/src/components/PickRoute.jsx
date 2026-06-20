@@ -2,7 +2,8 @@ import { Badge, Card, ListGroup, Button } from "react-bootstrap";
 import { MetroMap } from "./MetroMap";
 import { useState, useEffect } from "react";
 import { ConnectionItem } from "./Metro";
-import { END_COLOR, START_COLOR } from "../models/colors";
+import { END_COLOR, START_COLOR } from "../constants/colors";
+import { STARTING_COINS } from "../constants/game";
 import dayjs from "dayjs";
 import { TicketFull } from "./Ticket";
 
@@ -62,7 +63,7 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
                     <TicketFull
                         startStation={game.startStation}
                         endStation={game.endStation}
-                        coins={20 /*while the game is active the number of coins is always 20*/}
+                        coins={STARTING_COINS}
                         fromColor={START_COLOR}
                         toColor={END_COLOR}
                         displayMessage="Quick! Select the connections that you think connect your boarding station to your destination before the timer runs out."

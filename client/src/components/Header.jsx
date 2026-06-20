@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { Link, useNavigate } from "react-router";
 import UserContext from "../contexts/UserContext";
-import { PURPLE } from "../models/colors";
+import { PURPLE } from "../constants/colors";
 
 const PILL = {
     backgroundColor: "rgba(255,255,255,0.12)",
