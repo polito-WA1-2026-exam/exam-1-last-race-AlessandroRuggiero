@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PURPLE, GREY, RED, GREEN } from "../../constants/colors";
+import { BLUE, GREY, RED, GREEN } from "../../constants/colors";
 import { JourneyTrack } from "../../components/Metro";
 
 function CoinDelta({ effect }) {
@@ -55,7 +55,7 @@ export default function DisplayEvents({ events, connections, startCoins, setStat
                 {/* Header bar */}
                 <div
                     style={{
-                        background: "#1e1b2e",
+                        background: "#1a2744",
                         color: "white",
                         borderRadius: "16px 16px 0 0",
                         padding: "1.1rem 1.5rem",
@@ -89,8 +89,8 @@ export default function DisplayEvents({ events, connections, startCoins, setStat
                     {/* Connection segment */}
                     <div
                         style={{
-                            background: "#f8f6ff",
-                            border: `2px solid ${PURPLE}22`,
+                            background: "#f0f4ff",
+                            border: `2px solid ${BLUE}22`,
                             borderRadius: 12,
                             padding: "0.9rem 1.2rem",
                             display: "flex",
@@ -99,7 +99,7 @@ export default function DisplayEvents({ events, connections, startCoins, setStat
                             marginBottom: "1.5rem",
                         }}
                     >
-                        <span style={{ fontWeight: 700, fontSize: "0.95rem", color: "#1e1b2e", whiteSpace: "nowrap" }}>
+                        <span style={{ fontWeight: 700, fontSize: "0.95rem", color: "#1a2744", whiteSpace: "nowrap" }}>
                             {conn.station1}
                         </span>
                         <div
@@ -108,12 +108,12 @@ export default function DisplayEvents({ events, connections, startCoins, setStat
                                 alignItems: "center",
                                 flex: 1,
                                 justifyContent: "center",
-                                color: PURPLE,
+                                color: BLUE,
                             }}
                         >
                             <i className="bi bi-arrow-right" style={{ fontSize: "1.3rem" }} />
                         </div>
-                        <span style={{ fontWeight: 700, fontSize: "0.95rem", color: "#1e1b2e", whiteSpace: "nowrap" }}>
+                        <span style={{ fontWeight: 700, fontSize: "0.95rem", color: "#1a2744", whiteSpace: "nowrap" }}>
                             {conn.station2}
                         </span>
                     </div>
@@ -137,7 +137,7 @@ export default function DisplayEvents({ events, connections, startCoins, setStat
                         >
                             {positive ? "Bonus event" : "Incident"}
                         </div>
-                        <p style={{ fontWeight: 600, fontSize: "1rem", color: "#1e1b2e", margin: 0, lineHeight: 1.45 }}>
+                        <p style={{ fontWeight: 600, fontSize: "1rem", color: "#1a2744", margin: 0, lineHeight: 1.45 }}>
                             {event.description}
                         </p>
                     </div>
@@ -194,7 +194,7 @@ export default function DisplayEvents({ events, connections, startCoins, setStat
                     style={{
                         background: "white",
                         borderRadius: "0 0 16px 16px",
-                        borderTop: "1px solid #f0edf8",
+                        borderTop: "1px solid #e8eeff",
                         padding: "1rem 1.75rem",
                         display: "flex",
                         justifyContent: "flex-end",

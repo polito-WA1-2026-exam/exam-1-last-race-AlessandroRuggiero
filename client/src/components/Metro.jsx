@@ -1,7 +1,7 @@
 import { ListGroup } from "react-bootstrap";
 
 import "../styles/metro.css";
-import { GREY, PURPLE } from "../constants/colors";
+import { GREY, BLUE } from "../constants/colors";
 
 export function MetroDot({ color, size }) {
     const cls = size === "lg" ? "metro-dot metro-dot-lg" : "metro-dot";
@@ -66,7 +66,7 @@ export function ConnectionItem({ conn, selected, onClick, onRemove, onMoveUp, on
     );
 }
 
-export function MetroStop({ num, title, color = PURPLE, isLast, children }) {
+export function MetroStop({ num, title, color = BLUE, isLast, children }) {
     return (
         <div className="metro-stop">
             <div className="metro-stop-track">
@@ -119,10 +119,10 @@ export function JourneyTrack({ total, current }) {
                                 width: active ? 14 : 10,
                                 height: active ? 14 : 10,
                                 borderRadius: "50%",
-                                border: `2px solid ${done ? PURPLE : GREY}`,
-                                background: done ? PURPLE : "white",
+                                border: `2px solid ${done ? BLUE : GREY}`,
+                                background: done ? BLUE : "white",
                                 transition: "all 0.3s ease",
-                                boxShadow: active ? `0 0 0 3px rgba(111,66,193,0.25)` : "none",
+                                boxShadow: active ? `0 0 0 3px rgba(30,58,138,0.25)` : "none",
                             }}
                         />
                         {i < total - 1 && (
@@ -130,7 +130,7 @@ export function JourneyTrack({ total, current }) {
                                 style={{
                                     width: 28,
                                     height: 3,
-                                    background: i < current - 1 ? PURPLE : GREY,
+                                    background: i < current - 1 ? BLUE : GREY,
                                     transition: "background 0.3s ease",
                                 }}
                             />

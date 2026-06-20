@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { getLeaderboard, getNetwork } from "../api/game";
 import { useNavigate } from "react-router";
 import { RoutePreview, MetroDot, MetroConnector } from "../components/Metro";
-import { START_COLOR, END_COLOR, GREY, PURPLE } from "../constants/colors";
+import { START_COLOR, END_COLOR, GREY, BLUE } from "../constants/colors";
 
 const MEDAL = ["🥇", "🥈", "🥉"];
 
@@ -96,7 +96,7 @@ export default function LeaderBoard() {
     if (loading)
         return (
             <div className="text-center py-5">
-                <Spinner animation="border" style={{ color: PURPLE }} />
+                <Spinner animation="border" style={{ color: BLUE }} />
             </div>
         );
 
@@ -105,13 +105,13 @@ export default function LeaderBoard() {
     return (
         <Container className="py-5">
             <div className="d-flex align-items-center mb-3">
-                <MetroDot color={PURPLE} size="lg" />
-                <MetroConnector color={PURPLE} vertical={false} />
-                <MetroDot color={PURPLE} size="lg" />
-                <MetroConnector color={PURPLE} vertical={false} />
-                <MetroDot color={PURPLE} size="lg" />
-                <MetroConnector color={PURPLE} vertical={false} />
-                <MetroDot color={PURPLE} size="lg" />
+                <MetroDot color={BLUE} size="lg" />
+                <MetroConnector color={BLUE} vertical={false} />
+                <MetroDot color={BLUE} size="lg" />
+                <MetroConnector color={BLUE} vertical={false} />
+                <MetroDot color={BLUE} size="lg" />
+                <MetroConnector color={BLUE} vertical={false} />
+                <MetroDot color={BLUE} size="lg" />
             </div>
             <h1 className="fw-bold mb-4" style={{ letterSpacing: "-0.02em" }}>
                 Leaderboard

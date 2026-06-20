@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { Link, useNavigate } from "react-router";
 import UserContext from "../contexts/UserContext";
-import { PURPLE } from "../constants/colors";
+import { BLUE } from "../constants/colors";
 
 const PILL = {
     backgroundColor: "rgba(255,255,255,0.12)",
@@ -16,7 +16,7 @@ function Header() {
     const user = useContext(UserContext);
 
     return (
-        <Navbar style={{ backgroundColor: PURPLE }} expand="sm" className="py-3" variant="dark">
+        <Navbar style={{ backgroundColor: BLUE }} expand="sm" className="py-3" variant="dark">
             <Container>
                 <Navbar.Brand as={Link} to="/" className="fw-bold fs-5 text-white">
                     LastRace

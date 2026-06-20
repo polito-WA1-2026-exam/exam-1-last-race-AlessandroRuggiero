@@ -3,7 +3,7 @@ import { doLogin, doLogout } from "../api/auth";
 import { useNavigate, useLocation } from "react-router";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { MetroDot, MetroConnector } from "../components/Metro";
-import { PURPLE } from "../constants/colors";
+import { BLUE } from "../constants/colors";
 
 function LoginForm(props) {
     const [email, setEmail] = useState("");
@@ -24,11 +24,11 @@ function LoginForm(props) {
     return (
         <Container className="py-5" style={{ maxWidth: "420px" }}>
             <div className="d-flex align-items-center mb-3">
-                <MetroDot color={PURPLE} size="lg" />
-                <MetroConnector color={PURPLE} vertical={false} />
-                <MetroDot color={PURPLE} size="lg" />
-                <MetroConnector color={PURPLE} vertical={false} />
-                <MetroDot color={PURPLE} size="lg" />
+                <MetroDot color={BLUE} size="lg" />
+                <MetroConnector color={BLUE} vertical={false} />
+                <MetroDot color={BLUE} size="lg" />
+                <MetroConnector color={BLUE} vertical={false} />
+                <MetroDot color={BLUE} size="lg" />
             </div>
             <h1 className="fw-bold mb-1" style={{ letterSpacing: "-0.02em" }}>
                 Sign In
@@ -57,11 +57,7 @@ function LoginForm(props) {
                         autoComplete="current-password"
                     />
                 </Form.Group>
-                <Button
-                    type="submit"
-                    className="fw-bold w-100"
-                    style={{ backgroundColor: PURPLE, borderColor: PURPLE }}
-                >
+                <Button type="submit" className="fw-bold w-100" style={{ backgroundColor: BLUE, borderColor: BLUE }}>
                     Log In
                 </Button>
             </Form>
