@@ -124,16 +124,16 @@ app.post("/api/games", isLoggedIn, async (req, res) => {
     try {
         const [connections, stations] = await Promise.all([getConnections(), getStations()]);
         const network = new Network(stations, connections);
-        const startStation = network.getRandomStation();
-        let endStation = network.getRandomStation();
-        //console.log("start:", startStation, "end:", endStation);
+        const excludedStations = new Set();
+        const startStation = network.getRandomStation(excludedStations);
+        excludedStations.add(startStation);
+        let endStation = network.getRandomStation(excludedStations);
         while (network.calculateStops(startStation, endStation) < 3) {
-            endStation = network.getRandomStation();
+            excludedStations.add(endStation);
+            endStation = network.getRandomStation(excludedStations);
         }
         const startTime = dayjs().unix();
         const gameId = await createGame(startStation, endStation, user.id, startTime, 0); // i initialize the database object with 0 coins so if the user never delivers an answer, the coins will be 0. The 20 initial coins are handled in the post.
-        //console.log(network.stations);
-        //console.log(network.stations[startStation], network.stations[endStation]);
         const game = new Game(
             gameId,
             network.stationIdToName(startStation),

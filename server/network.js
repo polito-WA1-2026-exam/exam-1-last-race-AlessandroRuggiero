@@ -67,8 +67,9 @@ export default function Network(stations, connections) {
         return path ? path.length - 2 : -1;
     };
 
-    this.getRandomStation = function getRandomStation() {
-        const stationsArray = Array.from(this.stations.keys());
+    this.getRandomStation = function getRandomStation(excludedStations) {
+        const stationsArray = Array.from(this.stations.keys()).filter((s) => !excludedStations.has(s));
+        if (stationsArray.length === 0) throw new Error("No stations available");
         return stationsArray[Math.floor(Math.random() * stationsArray.length)];
     };
 
