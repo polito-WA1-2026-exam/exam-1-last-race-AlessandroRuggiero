@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Container, Table, Badge, Spinner, Alert, OverlayTrigger, Popover } from "react-bootstrap";
 import dayjs from "dayjs";
 import { getLeaderboard, getNetwork } from "../api/game";
+import { useNavigate } from "react-router";
 import { RoutePreview, MetroDot, MetroConnector } from "./Metro";
 import { START_COLOR, END_COLOR, GREY, PURPLE } from "../models/colors";
 
@@ -76,6 +77,7 @@ export default function LeaderBoard() {
     const [network, setNetwork] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         Promise.all([getLeaderboard(10), getNetwork()])
@@ -83,9 +85,9 @@ export default function LeaderBoard() {
                 setEntries(lb);
                 setNetwork(net);
             })
-            .catch(() => setError("Failed to load leaderboard."))
+            .catch((e) => e.message === "SESSION_EXPIRED" ? navigate("/logout", { state: { returnTo: "/login" } }) : setError("Failed to load leaderboard."))
             .finally(() => setLoading(false));
-    }, []);
+    }, [navigate]);
 
     if (loading)
         return (

@@ -1,12 +1,17 @@
 import baseUrl from "./baseurl";
 import { Network } from "../models/network";
 
+function checkAuth(response) {
+    if (response.status === 401) throw new Error("SESSION_EXPIRED");
+    return response;
+}
+
 export async function getNetwork() {
     const response = await fetch(`${baseUrl}/network`, {
         credentials: "include",
     });
 
-    if (response.ok) {
+    if (checkAuth(response).ok) {
         const body = await response.json();
         return new Network(body.stations, body.lines, body.connections);
     } else {
@@ -20,7 +25,7 @@ export async function getGame(id) {
         credentials: "include",
     });
 
-    if (response.ok) {
+    if (checkAuth(response).ok) {
         return await response.json();
     } else {
         throw new Error("Failed to fetch game");
@@ -34,7 +39,7 @@ export async function submitAnswer(gameId, connectionIds) {
         credentials: "include",
         body: JSON.stringify({ connections: connectionIds }),
     });
-    if (response.ok) return await response.json();
+    if (checkAuth(response).ok) return await response.json();
     throw new Error("Failed to submit answer");
 }
 
@@ -42,7 +47,7 @@ export async function getLeaderboard(count = 10) {
     const response = await fetch(`${baseUrl}/leaderboard?count=${count}`, {
         credentials: "include",
     });
-    if (response.ok) return await response.json();
+    if (checkAuth(response).ok) return await response.json();
     throw new Error("Failed to fetch leaderboard");
 }
 
@@ -52,7 +57,7 @@ export async function createGame() {
         credentials: "include",
     });
 
-    if (response.ok) {
+    if (checkAuth(response).ok) {
         return await response.json();
     } else {
         throw new Error("Failed to create game");

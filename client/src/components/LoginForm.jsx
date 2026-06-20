@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { doLogin, doLogout } from "../api/auth";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { MetroDot, MetroConnector } from "./Metro";
 import { PURPLE } from "../models/colors";
@@ -71,13 +71,14 @@ function LoginForm(props) {
 
 function Logout({ doLogin }) {
     const navigate = useNavigate();
+    const { state } = useLocation();
 
     useEffect(() => {
         doLogout().then(() => {
             doLogin({ id: undefined, email: undefined, name: undefined });
-            navigate("/");
+            navigate(state?.returnTo ?? "/");
         });
-    }, [doLogin, navigate]);
+    }, [doLogin, navigate, state]);
 
     return "Logging out...";
 }

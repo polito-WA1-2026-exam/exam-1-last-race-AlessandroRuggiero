@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
-import { useLocation, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { getGame, getNetwork, submitAnswer } from "../api/game";
 import PickRoute from "./PickRoute";
 import DisplayEvents from "./DisplayEvents";
@@ -12,6 +12,7 @@ const GAME_DURATION = 90;
 export default function PlayGame() {
     const { id } = useParams();
     const { state } = useLocation();
+    const navigate = useNavigate();
 
     const [game, setGame] = useState(state?.game ?? null);
     const [network, setNetwork] = useState(state?.network ?? null);
@@ -42,8 +43,12 @@ export default function PlayGame() {
                     setGameStateIndex(2);
                 }
             })
-            .catch((e) => setError(e.message));
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+            .catch((e) =>
+                e.message === "SESSION_EXPIRED"
+                    ? navigate("/logout", { state: { returnTo: "/login" } })
+                    : setError(e.message),
+            );
+    }, [id, game, network, navigate]);
 
     const handleSubmit = (selected) => {
         if (result) return;
@@ -55,7 +60,11 @@ export default function PlayGame() {
                 setResult(res);
                 setGameStateIndex(res.status === "won" ? 1 : 2);
             })
-            .catch((e) => setError(e.message));
+            .catch((e) =>
+                e.message === "SESSION_EXPIRED"
+                    ? navigate("/logout", { state: { returnTo: "/login" } })
+                    : setError(e.message),
+            );
     };
 
     if (error) return <div className="container py-4 alert alert-danger">{error}</div>;

@@ -14,16 +14,18 @@ export default function NewGame() {
     const [readyPopup, setReadyPopup] = useState(false);
     const navigate = useNavigate();
 
+    const onError = (e) => e.message === "SESSION_EXPIRED" ? navigate("/logout", { state: { returnTo: "/login" } }) : setError(e.message);
+
     useEffect(() => {
         getNetwork()
             .then(setNetwork)
-            .catch((e) => setError(e.message));
-    }, []);
+            .catch((e) => e.message === "SESSION_EXPIRED" ? navigate("/logout", { state: { returnTo: "/login" } }) : setError(e.message));
+    }, [navigate]);
 
     const handleBoard = () =>
         createGame()
             .then((game) => navigate(`/play/${game.id}`, { state: { game, network } }))
-            .catch((e) => setError(e.message));
+            .catch(onError);
 
     return (
         <div className="container py-4">
