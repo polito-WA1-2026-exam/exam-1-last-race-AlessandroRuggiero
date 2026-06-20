@@ -93,7 +93,7 @@ export function TicketFull({
     );
 }
 
-export function RouteHeader({ from, to, fromColor, toColor }) {
+function RouteHeader({ from, to, fromColor, toColor }) {
     return (
         <div className="d-flex align-items-center mb-3">
             <div style={{ flex: 1 }}>
