@@ -1,6 +1,6 @@
 import { Badge, Card, ListGroup, Button } from "react-bootstrap";
 import { MetroMap } from "./MetroMap";
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { ConnectionItem } from "./Metro";
 import { END_COLOR, START_COLOR } from "../models/colors";
 import dayjs from "dayjs";
@@ -39,14 +39,6 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
     useEffect(() => {
         if (remaining === 0) handleSubmit(selected);
     }, [remaining, handleSubmit, selected]);
-
-    const displayConnections = useMemo(() => {
-        if (!network) return [];
-        // sort connections by station 1 and 2 names
-        return [...network.connections].sort(
-            (a, b) => a.station1.localeCompare(b.station1) || a.station2.localeCompare(b.station2),
-        );
-    }, [network]);
 
     const toggle = (conn) =>
         setSelected((prev) =>
@@ -119,7 +111,7 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
                             Connections
                         </Card.Header>
                         <ListGroup variant="flush" className="overflow-auto flex-grow-1">
-                            {displayConnections.map((conn) => {
+                            {network?.connections.map((conn) => {
                                 const isSelected = !!selected.find((c) => c.id === conn.id);
                                 return (
                                     <ConnectionItem

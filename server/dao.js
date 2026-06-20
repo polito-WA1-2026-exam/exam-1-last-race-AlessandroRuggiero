@@ -65,7 +65,8 @@ export function getClientNetwork() {
       FROM connections c
       JOIN stations s1 ON c.station1_id = s1.id
       JOIN stations s2 ON c.station2_id = s2.id
-      JOIN lines l ON c.line_id = l.id`;
+      JOIN lines l ON c.line_id = l.id
+      ORDER BY s1.name, s2.name`;
         db.all(sql, [], (err, rows) => {
             if (err) reject(err);
             else {
