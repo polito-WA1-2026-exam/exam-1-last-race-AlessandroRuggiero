@@ -213,10 +213,10 @@ export function MetroMap({ style, hideLines = false }) {
 
             {/* Yellow line stations */}
             <g className="stn">
-                <title>Årstadal</title>
+                <title>Årstaberg</title>
                 <circle cx="300" cy="480" r="5" fill="white" stroke={YELLOW} strokeWidth="2.5" />
                 <text x="300" y="465" className="lbl" textAnchor="middle">
-                    Årstadal
+                    Årstaberg
                 </text>
             </g>
 

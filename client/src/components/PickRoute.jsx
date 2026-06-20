@@ -70,7 +70,7 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
                     <TicketFull
                         startStation={game.startStation}
                         endStation={game.endStation}
-                        coins={game.coins}
+                        coins={20 /*while the game is active the number of coins is always 20*/}
                         fromColor={START_COLOR}
                         toColor={END_COLOR}
                         displayMessage="Quick! Select the connections that you think connect your boarding station to your destination before the timer runs out."

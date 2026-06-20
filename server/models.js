@@ -11,10 +11,15 @@ export function Connection(station1, station2, line, id) {
     this.id = id;
 }
 
-export function Network(stations, lines, connections) {
-    this.stations = stations;
-    this.lines = lines;
-    this.connections = connections;
+export function Station(name, id) {
+    this.name = name;
+    this.id = id;
+}
+
+// line is currently not used in the Network class, but the model is here for completeness and future use
+export function Line(color, id) {
+    this.color = color;
+    this.id = id;
 }
 
 export function Game(id, startStation, endStation, userId, startTime, status, coins, answer) {

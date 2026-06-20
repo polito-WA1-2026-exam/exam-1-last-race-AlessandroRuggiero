@@ -2,9 +2,19 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-import { getUser, getNetwork, getStations, createGame, getGame, answerGame, getEvents, getLeaderboard } from "./dao.js";
+import {
+    getUser,
+    getClientNetwork,
+    getStations,
+    createGame,
+    getGame,
+    answerGame,
+    getEvents,
+    getLeaderboard,
+    getConnections,
+} from "./dao.js";
 import { Game } from "./models.js";
-import { calculateStops, verifyConnectionPath } from "./graph.js";
+import Network from "./network.js";
 import { check, validationResult } from "express-validator";
 import dayjs from "dayjs";
 
@@ -15,6 +25,10 @@ import session from "express-session";
 // init express
 const app = new express();
 const port = 3001;
+
+// game duration settings
+const normalGameDuration = 90; // seconds
+const tollerance = 10; // percentage
 
 // middlewares
 app.use(express.json());
@@ -98,7 +112,7 @@ app.delete("/api/sessions/current", (req, res) => {
 // DAO functions
 app.get("/api/network", isLoggedIn, async (req, res) => {
     try {
-        const network = await getNetwork();
+        const network = await getClientNetwork();
         res.json(network);
     } catch (err) {
         res.status(500).json({ error: "Internal server error" });
@@ -108,24 +122,28 @@ app.get("/api/network", isLoggedIn, async (req, res) => {
 app.post("/api/games", isLoggedIn, async (req, res) => {
     const user = req.user;
     try {
-        const [network, stationNameToId] = await Promise.all([getNetwork(), getStations()]);
-        const randomStation = () => network.stations[Math.floor(Math.random() * network.stations.length)];
-        const startStation = randomStation();
-        let endStation = randomStation();
-        console.log("start:", startStation, "end:", endStation);
-        while (calculateStops(network, startStation, endStation) < 3) {
-            endStation = randomStation();
+        const [connections, stations] = await Promise.all([getConnections(), getStations()]);
+        const network = new Network(stations, connections);
+        const startStation = network.getRandomStation();
+        let endStation = network.getRandomStation();
+        //console.log("start:", startStation, "end:", endStation);
+        while (network.calculateStops(startStation, endStation) < 3) {
+            endStation = network.getRandomStation();
         }
         const startTime = dayjs().unix();
-        const startCoins = 20;
-        const gameId = await createGame(
-            stationNameToId[startStation],
-            stationNameToId[endStation],
+        const gameId = await createGame(startStation, endStation, user.id, startTime, 0); // i initialize the database object with 0 coins so if the user never delivers an answer, the coins will be 0. The 20 initial coins are handled in the post.
+        //console.log(network.stations);
+        //console.log(network.stations[startStation], network.stations[endStation]);
+        const game = new Game(
+            gameId,
+            network.stationIdToName(startStation),
+            network.stationIdToName(endStation),
             user.id,
             startTime,
-            startCoins,
+            "active",
+            0,
+            null,
         );
-        const game = new Game(gameId, startStation, endStation, user.id, startTime, "active", startCoins, null);
         res.status(201).json(game);
     } catch (err) {
         console.error(err);
@@ -143,6 +161,16 @@ app.get(
         try {
             const game = await getGame(req.params.id, req.user.id);
             if (!game) return res.status(404).json({ error: "Game not found" });
+
+            // if the game is active but the duration exceeded the limit, we consider it lost
+            // the update to the db is not done here because this is a get route and it should not update the database
+            // in a production environment we should have a cron job running periodically to update games that where never answered and exceeded the time limit
+
+            const currentTime = dayjs().unix();
+            const gameDuration = currentTime - game.startTime;
+            if (game.status === "active" && gameDuration > normalGameDuration * (1 + tollerance / 100)) {
+                game.status = "lost";
+            }
             res.json(game);
         } catch (err) {
             res.status(500).json({ error: "Internal server error" });
@@ -161,9 +189,10 @@ app.post(
         const currentTime = dayjs().unix();
         const { connections } = req.body;
         try {
-            const [game, network, events] = await Promise.all([
+            const [game, connectionsData, stations, events] = await Promise.all([
                 getGame(req.params.id, req.user.id),
-                getNetwork(),
+                getConnections(),
+                getStations(),
                 getEvents(),
             ]);
             if (!game) return res.status(404).json({ error: "Game not found" });
@@ -171,17 +200,20 @@ app.post(
                 return res.status(409).json({ error: "Game already completed" });
             }
 
-            const normalGameDuration = 90; // seconds
-            const tollerance = 25; // percentage
             const gameDuration = currentTime - game.startTime;
             if (gameDuration > normalGameDuration * (1 + tollerance / 100)) {
                 console.log(
                     `(${game.id}) - Game duration ${gameDuration}s exceeded normal duration ${normalGameDuration}s`,
                 );
-                //return res.status(409).json({ error: "Time limit exceeded" });
+                return res.status(409).json({ error: "Time limit exceeded" });
             }
 
-            const correct = verifyConnectionPath(network, connections, game.startStation, game.endStation);
+            const network = new Network(stations, connectionsData);
+            const correct = network.verifyConnectionPath(
+                connections,
+                network.stationNameToId(game.startStation),
+                network.stationNameToId(game.endStation),
+            );
 
             const status = correct ? "won" : "lost";
             let coins = game.coins;
@@ -223,10 +255,6 @@ app.get(
         }
     },
 );
-
-app.get("/api/", async (req, res) => {
-    res.json({ message: "Server is running" });
-});
 
 // activate the server
 app.listen(port, "0.0.0.0", () => {
