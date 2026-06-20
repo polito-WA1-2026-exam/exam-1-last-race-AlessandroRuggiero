@@ -120,8 +120,6 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
                                         conn={conn}
                                         selected={isSelected}
                                         onClick={() => toggle(conn)}
-                                        startStation={game.startStation}
-                                        endStation={game.endStation}
                                     />
                                 );
                             })}
@@ -161,8 +159,6 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
                                         onRemove={toggle}
                                         onMoveUp={i > 0 ? () => moveItem(i, -1) : null}
                                         onMoveDown={i < selected.length - 1 ? () => moveItem(i, 1) : null}
-                                        startStation={game.startStation}
-                                        endStation={game.endStation}
                                     />
                                 ))
                             )}

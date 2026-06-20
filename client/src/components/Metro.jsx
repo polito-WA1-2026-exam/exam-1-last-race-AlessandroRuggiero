@@ -1,7 +1,7 @@
 import { ListGroup } from "react-bootstrap";
 
 import "../styles/metro.css";
-import { GREY, PURPLE, START_COLOR, END_COLOR } from "../constants/colors";
+import { GREY, PURPLE } from "../constants/colors";
 
 export function MetroDot({ color, size }) {
     const cls = size === "lg" ? "metro-dot metro-dot-lg" : "metro-dot";
@@ -12,11 +12,7 @@ export function MetroConnector({ color, vertical }) {
     return <div className={vertical ? "metro-connector" : "metro-connector-h"} style={{ backgroundColor: color }} />;
 }
 
-export function ConnectionItem({ conn, selected, onClick, onRemove, onMoveUp, onMoveDown, startStation, endStation }) {
-    const colors = [
-        conn.station1 === startStation ? START_COLOR : conn.station1 === endStation ? END_COLOR : GREY,
-        conn.station2 === startStation ? START_COLOR : conn.station2 === endStation ? END_COLOR : GREY,
-    ];
+export function ConnectionItem({ conn, selected, onClick, onRemove, onMoveUp, onMoveDown }) {
     return (
         <ListGroup.Item
             action={!!onClick}
@@ -25,9 +21,9 @@ export function ConnectionItem({ conn, selected, onClick, onRemove, onMoveUp, on
         >
             <div className="d-flex align-items-center text-nowrap flex-shrink-1" style={{ minWidth: 0 }}>
                 <span className="me-2">{conn.station1}</span>
-                <MetroDot color={colors[0]} />
+                <MetroDot color={GREY} />
                 <MetroConnector color={GREY} vertical={false} />
-                <MetroDot color={colors[1]} />
+                <MetroDot color={GREY} />
                 <span className="ms-2">{conn.station2}</span>
             </div>
             {(onMoveUp !== undefined || onMoveDown !== undefined) && (

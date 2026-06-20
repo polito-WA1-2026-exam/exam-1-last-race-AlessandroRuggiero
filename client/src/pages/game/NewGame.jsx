@@ -7,7 +7,7 @@ import { createGame, getNetwork } from "../../api/game";
 import { TicketFull } from "../../components/Ticket";
 import { START_COLOR, END_COLOR } from "../../constants/colors";
 import { STARTING_COINS } from "../../constants/game";
-import "../styles/ticket.css";
+import "../../styles/ticket.css";
 
 export default function NewGame() {
     const [network, setNetwork] = useState(null);

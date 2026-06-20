@@ -6,7 +6,7 @@ import { MetroDot, MetroConnector } from "../components/Metro";
 import { PURPLE } from "../constants/colors";
 
 function LoginForm(props) {
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errormsg, setErrormsg] = useState("");
 
@@ -14,7 +14,7 @@ function LoginForm(props) {
         ev.preventDefault();
         setErrormsg("");
         try {
-            const user = await doLogin(username, password);
+            const user = await doLogin(email, password);
             props.doLogin(user);
         } catch (ex) {
             setErrormsg(ex.message);
@@ -39,13 +39,13 @@ function LoginForm(props) {
                 </Alert>
             )}
             <Form onSubmit={doSubmit}>
-                <Form.Group className="mb-3" controlId="username">
-                    <Form.Label className="fw-semibold">Username</Form.Label>
+                <Form.Group className="mb-3" controlId="email">
+                    <Form.Label className="fw-semibold">Email</Form.Label>
                     <Form.Control
-                        type="text"
-                        value={username}
-                        onChange={(ev) => setUsername(ev.target.value)}
-                        autoComplete="username"
+                        type="email"
+                        value={email}
+                        onChange={(ev) => setEmail(ev.target.value)}
+                        autoComplete="email"
                     />
                 </Form.Group>
                 <Form.Group className="mb-4" controlId="password">
@@ -75,7 +75,7 @@ function Logout({ doLogin }) {
 
     useEffect(() => {
         doLogout().then(() => {
-            doLogin({ id: undefined, email: undefined, name: undefined });
+            doLogin({ id: undefined, email: undefined, username: undefined });
             navigate(state?.returnTo ?? "/");
         });
     }, [doLogin, navigate, state]);
