@@ -111,57 +111,57 @@ export default function LeaderBoard() {
                 Leaderboard
             </h1>
             <div className="rounded-3 overflow-hidden border">
-            <Table hover responsive className="mb-0">
-                <thead style={{ "--bs-table-bg": "#f0f0f0" }}>
-                    <tr>
-                        <th>#</th>
-                        <th>Player</th>
-                        <th>Best Route</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th className="text-end">Coins</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {entries.map((entry, i) => (
-                        <tr key={entry.userId}>
-                            <td className="fw-bold align-middle">{MEDAL[i] ?? i + 1}</td>
-                            <td className="fw-semibold align-middle">{entry.username}</td>
-                            <td className="align-middle">
-                                <OverlayTrigger
-                                    trigger={["hover", "focus"]}
-                                    placement="right"
-                                    overlay={<StopsPopover entry={entry} network={network} />}
-                                >
-                                    <span style={{ cursor: "default", display: "inline-flex" }}>
-                                        <RoutePreview
-                                            startStation={entry.startStation}
-                                            endStation={entry.endStation}
-                                            colors={[START_COLOR, END_COLOR]}
-                                        />
-                                    </span>
-                                </OverlayTrigger>
-                            </td>
-                            <td className="text-muted small align-middle">{formatDate(entry.startTime)}</td>
-                            <td className="text-muted small align-middle">
-                                {Math.floor(entry.endTime - entry.startTime)}s
-                            </td>
-                            <td className="text-end align-middle">
-                                <Badge bg="warning" text="dark" pill>
-                                    {entry.coins}
-                                </Badge>
-                            </td>
-                        </tr>
-                    ))}
-                    {entries.length === 0 && (
+                <Table hover responsive className="mb-0">
+                    <thead style={{ "--bs-table-bg": "#f0f0f0" }}>
                         <tr>
-                            <td colSpan={6} className="text-center text-muted py-4">
-                                No completed games yet. Claim your place by winning a game!
-                            </td>
+                            <th>#</th>
+                            <th>Player</th>
+                            <th>Best Route</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th className="text-end">Coins</th>
                         </tr>
-                    )}
-                </tbody>
-            </Table>
+                    </thead>
+                    <tbody>
+                        {entries.map((entry, i) => (
+                            <tr key={entry.userId}>
+                                <td className="fw-bold align-middle">{MEDAL[i] ?? i + 1}</td>
+                                <td className="fw-semibold align-middle">{entry.username}</td>
+                                <td className="align-middle">
+                                    <OverlayTrigger
+                                        trigger={["hover", "focus"]}
+                                        placement="right"
+                                        overlay={<StopsPopover entry={entry} network={network} />}
+                                    >
+                                        <span style={{ cursor: "default", display: "inline-flex" }}>
+                                            <RoutePreview
+                                                startStation={entry.startStation}
+                                                endStation={entry.endStation}
+                                                colors={[START_COLOR, END_COLOR]}
+                                            />
+                                        </span>
+                                    </OverlayTrigger>
+                                </td>
+                                <td className="text-muted small align-middle">{formatDate(entry.startTime)}</td>
+                                <td className="text-muted small align-middle">
+                                    {Math.floor(entry.endTime - entry.startTime)}s
+                                </td>
+                                <td className="text-end align-middle">
+                                    <Badge bg="warning" text="dark" pill>
+                                        {entry.coins}
+                                    </Badge>
+                                </td>
+                            </tr>
+                        ))}
+                        {entries.length === 0 && (
+                            <tr>
+                                <td colSpan={6} className="text-center text-muted py-4">
+                                    No completed games yet. Claim your place by winning a game!
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </Table>
             </div>
         </Container>
     );

@@ -24,11 +24,11 @@ export function ConnectionItem({ conn, selected, onClick, onRemove, onMoveUp, on
             className={`d-flex justify-content-between align-items-center text-dark ${selected ? "connection-selected" : ""}`}
         >
             <div className="d-flex align-items-center text-nowrap flex-shrink-1" style={{ minWidth: 0 }}>
-                <span className="me-2 fw-semibold">{conn.station1}</span>
+                <span className="me-2">{conn.station1}</span>
                 <MetroDot color={colors[0]} />
                 <MetroConnector color={GREY} vertical={false} />
                 <MetroDot color={colors[1]} />
-                <span className="ms-2 fw-semibold">{conn.station2}</span>
+                <span className="ms-2">{conn.station2}</span>
             </div>
             {(onMoveUp !== undefined || onMoveDown !== undefined) && (
                 <div className="d-flex align-items-center ms-auto gap-1">
