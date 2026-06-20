@@ -1,8 +1,8 @@
 export function MetroMap({ style, hideLines = false }) {
     const RED = hideLines ? "#999" : "#E7002D";
     const BLUE = hideLines ? "#999" : "#003E7E";
-    const VIOLET = hideLines ? "#999" : "#8844BB";
-    const YELLOW = hideLines ? "#999" : "#D4A017";
+    const VIOLET = hideLines ? "#999" : "#00A651";
+    const YELLOW = hideLines ? "#999" : "#FFD700";
     const DARK = "#1A1A1A";
 
     return (

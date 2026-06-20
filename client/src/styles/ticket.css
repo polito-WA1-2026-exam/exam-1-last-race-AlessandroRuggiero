@@ -13,7 +13,6 @@
     letter-spacing: 0.1em;
 }
 
-
 .btn-lr {
     display: inline-flex;
     align-items: center;
@@ -28,14 +27,16 @@
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    transition: background-color 0.15s, transform 0.15s ease, box-shadow 0.15s ease;
+    transition:
+        background-color 0.15s,
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
 }
 
 .btn-lr:hover {
     background-color: #5a32a3;
     transform: translateY(-1px);
 }
-
 
 .slot-reel {
     overflow: hidden;
@@ -56,14 +57,17 @@
 }
 
 @keyframes slot-wheel {
-    from { transform: translateY(0); }
-    to   { transform: translateY(-1.4em); }
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-1.4em);
+    }
 }
 
 .modal-ticket {
     max-width: 780px;
 }
-
 
 .ticket-full {
     display: flex;
@@ -134,7 +138,6 @@
     text-transform: uppercase;
     letter-spacing: 0.04em;
 }
-
 
 /* Right white panel */
 .ticket-right {
