@@ -1,10 +1,10 @@
 import baseUrl from "./baseurl";
 
-async function doLogin(username, password) {
+async function doLogin(email, password) {
     const response = await fetch(`${baseUrl}/sessions`, {
         method: "POST",
         body: JSON.stringify({
-            username: username,
+            username: email,
             password: password,
         }),
         headers: {

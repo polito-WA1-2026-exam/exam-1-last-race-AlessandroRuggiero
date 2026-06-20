@@ -1,7 +1,7 @@
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { useNavigate } from "react-router";
-import { MetroDot, MetroConnector } from "./Metro";
-import { PURPLE } from "../models/colors";
+import { MetroDot, MetroConnector } from "../../components/Metro";
+import { PURPLE } from "../../constants/colors";
 
 export default function DisplayFinishedGame({ result }) {
     const navigate = useNavigate();

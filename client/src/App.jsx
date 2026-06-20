@@ -3,12 +3,12 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import UserContext from "./contexts/UserContext";
 import { checkSession } from "./api/auth";
-import { LoginForm, Logout } from "./components/LoginForm";
+import { LoginForm, Logout } from "./pages/Auth";
 import Header from "./components/Header";
-import Home from "./components/Home";
-import NewGame from "./components/NewGame";
-import PlayGame from "./components/PlayGame";
-import LeaderBoard from "./components/LeaderBoard";
+import Home from "./pages/Home";
+import NewGame from "./pages/game/NewGame";
+import PlayGame from "./pages/game/PlayGame";
+import LeaderBoard from "./pages/LeaderBoard";
 
 function App() {
     const navigate = useNavigate();
@@ -27,7 +27,7 @@ function App() {
                     console.log("Session check successful: " + JSON.stringify(result));
                     setUser({
                         id: result.id,
-                        email: result.username,
+                        email: result.email,
                         username: result.username,
                     });
                 }
@@ -41,7 +41,7 @@ function App() {
     const doLogin = (newUser) => {
         setUser({
             id: newUser.id,
-            email: newUser.username,
+            email: newUser.email,
             username: newUser.username,
         });
         navigate("/");

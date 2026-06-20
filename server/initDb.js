@@ -11,7 +11,6 @@ const lines = {
         "Aspudden",
         "Liljeholmen",
         "Hornstull",
-        "Zinkensdamm",
         "Slussen",
         "Gamla stan",
         "T-Centralen",

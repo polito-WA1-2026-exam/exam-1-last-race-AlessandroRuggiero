@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { MetroDot, MetroConnector } from "./Metro";
-import { GREY } from "../models/colors";
+import { GREY } from "../constants/colors";
 
 function SlotStation({ stations, offset = 0 }) {
     const [index, setIndex] = useState(offset % stations.length);
@@ -93,7 +93,7 @@ export function TicketFull({
     );
 }
 
-export function RouteHeader({ from, to, fromColor, toColor }) {
+function RouteHeader({ from, to, fromColor, toColor }) {
     return (
         <div className="d-flex align-items-center mb-3">
             <div style={{ flex: 1 }}>

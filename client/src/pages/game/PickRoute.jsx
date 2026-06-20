@@ -1,10 +1,11 @@
 import { Badge, Card, ListGroup, Button } from "react-bootstrap";
-import { MetroMap } from "./MetroMap";
-import { useMemo, useState, useEffect } from "react";
-import { ConnectionItem } from "./Metro";
-import { END_COLOR, START_COLOR } from "../models/colors";
+import { MetroMap } from "../../components/MetroMap";
+import { useState, useEffect } from "react";
+import { ConnectionItem } from "../../components/Metro";
+import { END_COLOR, START_COLOR } from "../../constants/colors";
+import { STARTING_COINS } from "../../constants/game";
 import dayjs from "dayjs";
-import { TicketFull } from "./Ticket";
+import { TicketFull } from "../../components/Ticket";
 
 function Countdown({ remaining }) {
     const bg = remaining >= 60 ? "success" : remaining > 30 ? "warning" : "danger";
@@ -40,14 +41,6 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
         if (remaining === 0) handleSubmit(selected);
     }, [remaining, handleSubmit, selected]);
 
-    const displayConnections = useMemo(() => {
-        if (!network) return [];
-        // sort connections by station 1 and 2 names
-        return [...network.connections].sort(
-            (a, b) => a.station1.localeCompare(b.station1) || a.station2.localeCompare(b.station2),
-        );
-    }, [network]);
-
     const toggle = (conn) =>
         setSelected((prev) =>
             prev.find((c) => c.id === conn.id) ? prev.filter((c) => c.id !== conn.id) : [...prev, conn],
@@ -70,7 +63,7 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
                     <TicketFull
                         startStation={game.startStation}
                         endStation={game.endStation}
-                        coins={game.coins}
+                        coins={STARTING_COINS}
                         fromColor={START_COLOR}
                         toColor={END_COLOR}
                         displayMessage="Quick! Select the connections that you think connect your boarding station to your destination before the timer runs out."
@@ -119,7 +112,7 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
                             Connections
                         </Card.Header>
                         <ListGroup variant="flush" className="overflow-auto flex-grow-1">
-                            {displayConnections.map((conn) => {
+                            {network?.connections.map((conn) => {
                                 const isSelected = !!selected.find((c) => c.id === conn.id);
                                 return (
                                     <ConnectionItem
@@ -127,8 +120,6 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
                                         conn={conn}
                                         selected={isSelected}
                                         onClick={() => toggle(conn)}
-                                        startStation={game.startStation}
-                                        endStation={game.endStation}
                                     />
                                 );
                             })}
@@ -168,8 +159,6 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
                                         onRemove={toggle}
                                         onMoveUp={i > 0 ? () => moveItem(i, -1) : null}
                                         onMoveDown={i < selected.length - 1 ? () => moveItem(i, 1) : null}
-                                        startStation={game.startStation}
-                                        endStation={game.endStation}
                                     />
                                 ))
                             )}

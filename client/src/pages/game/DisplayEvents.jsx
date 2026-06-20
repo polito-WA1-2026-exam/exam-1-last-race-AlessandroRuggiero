@@ -1,9 +1,6 @@
 import { useState } from "react";
-import { PURPLE, GREY } from "../models/colors";
-import { JourneyTrack } from "./Metro";
-
-const RED = "#dc3545";
-const GREEN = "#198754";
+import { PURPLE, GREY, RED, GREEN } from "../../constants/colors";
+import { JourneyTrack } from "../../components/Metro";
 
 function CoinDelta({ effect }) {
     const positive = effect >= 0;

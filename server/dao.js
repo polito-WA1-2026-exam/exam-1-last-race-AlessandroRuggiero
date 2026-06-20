@@ -1,12 +1,11 @@
 import sqlite from "sqlite3";
 import crypto from "crypto";
-import { Network, Connection, Game, Event } from "./models.js";
+import { Connection, Station, Game, Event, Line } from "./models.js";
 
 const db = new sqlite.Database("gameDB.sqlite", (err) => {
     if (err) throw err;
 });
 
-/* USERS */
 export const getUser = (email, password) => {
     return new Promise((resolve, reject) => {
         const sql = "SELECT id, email, username, hash, salt FROM users WHERE email = ?";
@@ -33,18 +32,41 @@ export function getStations() {
         const sql = "SELECT name, id FROM stations";
         db.all(sql, [], (err, rows) => {
             if (err) reject(err);
-            else resolve(Object.fromEntries(rows.map((row) => [row.name, row.id])));
+            else resolve(rows.map((r) => new Station(r.name, r.id)));
         });
     });
 }
 
-export function getNetwork() {
+export function getLines() {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT color, id FROM lines";
+        db.all(sql, [], (err, rows) => {
+            if (err) reject(err);
+            else resolve(rows.map((r) => new Line(r.color, r.id)));
+        });
+    });
+}
+// this function is used to get the connections in a format suitable for the Network class, with station ids instead of names
+export function getConnections() {
+    return new Promise((resolve, reject) => {
+        const sql = `SELECT connections.id, station1_id AS station1, station2_id AS station2, l.color AS line
+        FROM connections JOIN lines l ON connections.line_id = l.id`;
+        db.all(sql, [], (err, rows) => {
+            if (err) reject(err);
+            else resolve(rows.map((r) => new Connection(r.station1, r.station2, r.line, r.id)));
+        });
+    });
+}
+
+// this function is used to get the network in a format suitable for the client, with station names instead of ids
+export function getClientNetwork() {
     return new Promise((resolve, reject) => {
         const sql = `SELECT s1.name AS station1, s2.name AS station2, l.color AS line, c.id AS connectionId
       FROM connections c
       JOIN stations s1 ON c.station1_id = s1.id
       JOIN stations s2 ON c.station2_id = s2.id
-      JOIN lines l ON c.line_id = l.id`;
+      JOIN lines l ON c.line_id = l.id
+      ORDER BY s1.name, s2.name`;
         db.all(sql, [], (err, rows) => {
             if (err) reject(err);
             else {
@@ -54,7 +76,7 @@ export function getNetwork() {
                 const lines = [...new Set(connections.map((row) => row.line))];
                 const stations = [...new Set(connections.map((row) => [row.station1, row.station2]).flat())];
 
-                resolve(new Network(stations, lines, connections));
+                resolve({ connections, lines, stations });
             }
         });
     });
