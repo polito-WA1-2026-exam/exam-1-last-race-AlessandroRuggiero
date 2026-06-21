@@ -6,6 +6,7 @@ import { END_COLOR, START_COLOR } from "../../constants/colors";
 import { STARTING_COINS } from "../../constants/game";
 import dayjs from "dayjs";
 import { TicketFull } from "../../components/Ticket";
+import "../../styles/panels.css";
 
 function Countdown({ remaining }) {
     const bg = remaining >= 60 ? "success" : remaining > 30 ? "warning" : "danger";
@@ -98,16 +99,10 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
                 {/* Middle: all connections */}
                 <div className="col-4 d-flex flex-column">
                     <Card
-                        className="flex-grow-1 overflow-hidden d-flex flex-column border-0"
-                        style={{ boxShadow: "0 6px 28px rgba(0,0,0,0.10)", borderRadius: 16 }}
+                        className="flex-grow-1 d-flex flex-column border-0 lr-panel"
                     >
                         <Card.Header
-                            className="py-2 px-3 fw-bold"
-                            style={{
-                                background: "white",
-                                color: "#1e1b2e",
-                                borderBottom: "2px solid #00538f",
-                            }}
+                            className="py-2 px-3 fw-bold lr-panel-header"
                         >
                             Connections
                         </Card.Header>
@@ -130,16 +125,10 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
                 {/* Right: selected route */}
                 <div className="col-3 d-flex flex-column">
                     <Card
-                        className="flex-grow-1 overflow-hidden d-flex flex-column border-0"
-                        style={{ boxShadow: "0 6px 28px rgba(0,0,0,0.10)", borderRadius: 16 }}
+                        className="flex-grow-1 d-flex flex-column border-0 lr-panel"
                     >
                         <Card.Header
-                            className="py-2 px-3 fw-bold"
-                            style={{
-                                background: "white",
-                                color: "#1e1b2e",
-                                borderBottom: "2px solid #00538f",
-                            }}
+                            className="py-2 px-3 fw-bold lr-panel-header"
                         >
                             Your Route
                         </Card.Header>

@@ -1,0 +1,16 @@
+.lr-title {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.lr-panel {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.1);
+}
+
+.lr-panel-header {
+    background: white;
+    color: #1e1b2e;
+    border-bottom: 2px solid #00538f;
+}

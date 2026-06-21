@@ -2,6 +2,7 @@ import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import { MetroDot, MetroConnector } from "../../components/Metro";
 import { BLUE } from "../../constants/colors";
+import "../../styles/panels.css";
 
 export default function DisplayFinishedGame({ result }) {
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function DisplayFinishedGame({ result }) {
                         <MetroDot color={BLUE} size="lg" />
                     </div>
 
-                    <h1 className="fw-bold mb-1" style={{ letterSpacing: "-0.02em" }}>
+                    <h1 className="lr-title mb-1">
                         {won ? "You won!" : "You lost"}
                     </h1>
                     <p className="text-muted mb-4">
