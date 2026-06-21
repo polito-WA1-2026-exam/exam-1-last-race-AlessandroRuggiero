@@ -6,7 +6,11 @@ import { useNavigate } from "react-router";
 import { RoutePreview, MetroDot, MetroConnector } from "../components/Metro";
 import { START_COLOR, END_COLOR, GREY, BLUE } from "../constants/colors";
 
-const MEDAL = ["🥇", "🥈", "🥉"];
+const MEDAL = [
+    <i className="bi bi-trophy-fill" style={{ color: "#FFD700", fontSize: "1.1rem" }} />,
+    <i className="bi bi-trophy-fill" style={{ color: "#C0C0C0", fontSize: "1.1rem" }} />,
+    <i className="bi bi-trophy-fill" style={{ color: "#CD7F32", fontSize: "1.1rem" }} />,
+];
 
 const formatDate = (unixSeconds) => dayjs.unix(unixSeconds).format("DD/MM/YYYY");
 
@@ -118,7 +122,15 @@ export default function LeaderBoard() {
             </h1>
             <div style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 6px 28px rgba(0,0,0,0.10)" }}>
                 <Table hover responsive className="mb-0">
-                    <thead style={{ "--bs-table-bg": "white", "--bs-table-cell-padding-x": "1rem", "--bs-table-cell-padding-y": "0.5rem", borderBottom: `2px solid ${BLUE}`, color: "#1e1b2e" }}>
+                    <thead
+                        style={{
+                            "--bs-table-bg": "white",
+                            "--bs-table-cell-padding-x": "1rem",
+                            "--bs-table-cell-padding-y": "0.5rem",
+                            borderBottom: `2px solid ${BLUE}`,
+                            color: "#1e1b2e",
+                        }}
+                    >
                         <tr>
                             <th>#</th>
                             <th>Player</th>

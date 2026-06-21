@@ -36,12 +36,7 @@ export default function DisplayFinishedGame({ result }) {
                     </Card>
 
                     <Row className="g-2">
-                        <Col>
-                            <Button variant="outline-secondary" className="fw-bold w-100" onClick={() => navigate("/")}>
-                                Back to home
-                            </Button>
-                        </Col>
-                        <Col>
+                        <Col xs={12}>
                             <Button
                                 className="fw-bold w-100"
                                 style={{ backgroundColor: BLUE, borderColor: BLUE }}
@@ -50,6 +45,22 @@ export default function DisplayFinishedGame({ result }) {
                                 Try again
                             </Button>
                         </Col>
+                        <Col>
+                            <Button variant="outline-secondary" className="fw-bold w-100" onClick={() => navigate("/")}>
+                                Back to home
+                            </Button>
+                        </Col>
+                        {won && (
+                            <Col>
+                                <Button
+                                    variant="outline-secondary"
+                                    className="fw-bold w-100"
+                                    onClick={() => navigate("/leaderboard")}
+                                >
+                                    Leaderboard
+                                </Button>
+                            </Col>
+                        )}
                     </Row>
                 </Col>
             </Row>
