@@ -116,9 +116,9 @@ export default function LeaderBoard() {
             <h1 className="fw-bold mb-4" style={{ letterSpacing: "-0.02em" }}>
                 Leaderboard
             </h1>
-            <div className="rounded-3 overflow-hidden border">
+            <div style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 6px 28px rgba(0,0,0,0.10)" }}>
                 <Table hover responsive className="mb-0">
-                    <thead style={{ "--bs-table-bg": "#f0f0f0" }}>
+                    <thead style={{ "--bs-table-bg": "white", "--bs-table-cell-padding-x": "1rem", "--bs-table-cell-padding-y": "0.5rem", borderBottom: `2px solid ${BLUE}`, color: "#1e1b2e" }}>
                         <tr>
                             <th>#</th>
                             <th>Player</th>
