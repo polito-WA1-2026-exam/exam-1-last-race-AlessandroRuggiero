@@ -58,30 +58,6 @@ export function getConnections() {
     });
 }
 
-// this function is used to get the network in a format suitable for the client, with station names instead of ids
-export function getClientNetwork() {
-    return new Promise((resolve, reject) => {
-        const sql = `SELECT s1.name AS station1, s2.name AS station2, l.color AS line, c.id AS connectionId
-      FROM connections c
-      JOIN stations s1 ON c.station1_id = s1.id
-      JOIN stations s2 ON c.station2_id = s2.id
-      JOIN lines l ON c.line_id = l.id
-      ORDER BY s1.name, s2.name`;
-        db.all(sql, [], (err, rows) => {
-            if (err) reject(err);
-            else {
-                const connections = rows.map(
-                    (row) => new Connection(row.station1, row.station2, row.line, row.connectionId),
-                );
-                const lines = [...new Set(connections.map((row) => row.line))];
-                const stations = [...new Set(connections.map((row) => [row.station1, row.station2]).flat())];
-
-                resolve({ connections, lines, stations });
-            }
-        });
-    });
-}
-
 export function getEvents() {
     return new Promise((resolve, reject) => {
         db.all("SELECT id, description, effect FROM events", [], (err, rows) => {

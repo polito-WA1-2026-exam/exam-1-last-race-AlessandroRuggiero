@@ -84,4 +84,18 @@ export default function Network(stations, connections) {
         const station = this.stations.get(id);
         return station ? station.name : null;
     };
+
+    this.toClientNetwork = function toClientNetwork() {
+        const connections = [...this.connections.values()]
+            .map((c) => ({
+                station1: this.stationIdToName(c.station1),
+                station2: this.stationIdToName(c.station2),
+                line: c.line,
+                id: c.id,
+            }))
+            .sort((a, b) => a.station1.localeCompare(b.station1) || a.station2.localeCompare(b.station2));
+        const lines = [...new Set(connections.map((c) => c.line))];
+        const stations = [...new Set(connections.flatMap((c) => [c.station1, c.station2]))];
+        return { connections, lines, stations };
+    };
 }
