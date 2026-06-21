@@ -134,16 +134,18 @@ async function initDb() {
     }
 
     const events = [
-        { description: "Event 1", effect: 0 },
-        { description: "Event 2", effect: -2 },
-        { description: "Event 3", effect: 1 },
-        { description: "Event 4", effect: -4 },
-        { description: "Event 5", effect: 3 },
-        { description: "Event 6", effect: -1 },
-        { description: "Event 7", effect: 4 },
-        { description: "Event 8", effect: -3 },
-        { description: "Event 9", effect: 2 },
-        { description: "Event 10", effect: 0 },
+        { description: "Quiet journey as usual on Tunnelbana", effect: 0 },
+        { description: "You stop to admire the station murals", effect: -1 },
+        { description: "A pickpocket steals from you on the platform", effect: -4 },
+        { description: "You help a lost tourist", effect: 1 },
+        { description: "Wrong platform. You miss your train", effect: -2 },
+        { description: "You win a scratch card from a promo stand at the station", effect: 4 },
+        { description: "You find a forgotten travel card on the seat", effect: 2 },
+        { description: "Overcrowded carriage. You wait for the next train", effect: -1 },
+        { description: "A busker plays something beautiful", effect: 1 },
+        { description: "The station is unusually quiet", effect: 2 },
+        { description: "The station is packed. You can't get to your train in time", effect: -1 },
+        { description: "Your metro card glitches at the barrier", effect: -1 },
     ];
     for (const event of events) {
         await run("INSERT INTO events (description, effect) VALUES (?, ?)", [event.description, event.effect]);
