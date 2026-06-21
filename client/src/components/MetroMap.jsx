@@ -15,8 +15,8 @@ export function MetroMap({ style, hideLines = false }) {
         >
             <defs>
                 <style>{`
-                    .lbl  { font: 13px system-ui,'Helvetica Neue',Arial,sans-serif; fill: #444; }
-                    .lblb { font: 600 15px system-ui,'Helvetica Neue',Arial,sans-serif; fill: #111; }
+                    .lbl  { font: 13px system-ui,'Helvetica Neue',Arial,sans-serif; fill: #444; text-shadow: 0 0 3px #fff, 0 0 3px #fff; }
+                    .lblb { font: 600 15px system-ui,'Helvetica Neue',Arial,sans-serif; fill: #111; text-shadow: 0 0 3px #fff, 0 0 3px #fff; }
                     .stn  { cursor: pointer; }
                     .stn circle { transition: stroke-width 0.12s, r 0.12s; }
                     .stn:hover circle { stroke-width: 4.5px; }

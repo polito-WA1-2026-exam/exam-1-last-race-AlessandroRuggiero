@@ -27,19 +27,27 @@ function CoinDelta({ effect }) {
     );
 }
 
-export default function DisplayEvents({ events, connections, startCoins, setStateIndex }) {
+export default function DisplayEvents({ events, connections, departureStation, startCoins, setStateIndex }) {
     const [eventIndex, setEventIndex] = useState(0);
+    const [lastStation, setLastStation] = useState(departureStation);
+
     const event = events[eventIndex];
-    const conn = connections[eventIndex];
     const isLast = eventIndex === events.length - 1;
     const positive = event.effect >= 0;
+
+    const c = connections[eventIndex];
+    const conn = c.station1 === lastStation ? c : { station1: c.station2, station2: c.station1 };
 
     const coinsNow = startCoins + events.slice(0, eventIndex + 1).reduce((acc, e) => acc + e.effect, 0);
     const coinsBefore = startCoins + events.slice(0, eventIndex).reduce((acc, e) => acc + e.effect, 0);
 
     const handleNext = () => {
-        if (!isLast) setEventIndex((prev) => prev + 1);
-        else setStateIndex(2);
+        if (!isLast) {
+            setLastStation(conn.station2);
+            setEventIndex((prev) => prev + 1);
+        } else {
+            setStateIndex(2);
+        }
     };
 
     return (

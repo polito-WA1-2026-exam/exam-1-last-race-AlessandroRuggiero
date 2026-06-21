@@ -35,7 +35,7 @@ export default function NewGame() {
 
     return (
         <div className="container py-4">
-            <h2 className="mb-4">Network Map</h2>
+            <h5 className="mb-3 text-muted">Network Map</h5>
             {error && <div className="alert alert-danger">{error}</div>}
             {!network && !error && (
                 <div className="text-center py-5">
@@ -44,7 +44,10 @@ export default function NewGame() {
             )}
             {network && (
                 <>
-                    <div className="mb-4">
+                    <div
+                        className="mb-4 p-3"
+                        style={{ background: "#f8f9fa", borderRadius: 16 }}
+                    >
                         <MetroMap style={{ maxHeight: "60vh" }} />
                     </div>
                     <div className="d-flex justify-content-center">

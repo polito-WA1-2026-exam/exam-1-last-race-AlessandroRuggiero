@@ -77,6 +77,7 @@ export default function PlayGame() {
             <DisplayEvents
                 events={result.happenedEvents}
                 connections={result.answer.map((id) => network.connections.find((c) => c.id === id))}
+                departureStation={game.startStation}
                 startCoins={STARTING_COINS}
                 setStateIndex={setGameStateIndex}
             />
