@@ -3,6 +3,26 @@
     letter-spacing: -0.02em;
 }
 
+.trophy-gold {
+    color: #ffd700;
+    font-size: 1.1rem;
+}
+.trophy-silver {
+    color: #c0c0c0;
+    font-size: 1.1rem;
+}
+.trophy-bronze {
+    color: #cd7f32;
+    font-size: 1.1rem;
+}
+
+.lr-map-container {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.1);
+    padding: 12px;
+}
+
 .lr-panel {
     border-radius: 16px;
     overflow: hidden;

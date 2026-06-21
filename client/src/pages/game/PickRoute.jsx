@@ -84,28 +84,14 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
                             </div>
                         </div>
                     </TicketFull>
-                    <div
-                        className="mt-4"
-                        style={{
-                            background: "white",
-                            borderRadius: 16,
-                            boxShadow: "0 6px 28px rgba(0,0,0,0.10)",
-                            padding: "12px",
-                        }}
-                    >
+                    <div className="mt-4 lr-map-container">
                         <MetroMap hideLines />
                     </div>
                 </div>
                 {/* Middle: all connections */}
                 <div className="col-4 d-flex flex-column">
-                    <Card
-                        className="flex-grow-1 d-flex flex-column border-0 lr-panel"
-                    >
-                        <Card.Header
-                            className="py-2 px-3 fw-bold lr-panel-header"
-                        >
-                            Connections
-                        </Card.Header>
+                    <Card className="flex-grow-1 d-flex flex-column border-0 lr-panel">
+                        <Card.Header className="py-2 px-3 fw-bold lr-panel-header">Connections</Card.Header>
                         <ListGroup variant="flush" className="overflow-auto flex-grow-1">
                             {network?.connections.map((conn) => {
                                 const isSelected = !!selected.find((c) => c.id === conn.id);
@@ -124,14 +110,8 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
 
                 {/* Right: selected route */}
                 <div className="col-3 d-flex flex-column">
-                    <Card
-                        className="flex-grow-1 d-flex flex-column border-0 lr-panel"
-                    >
-                        <Card.Header
-                            className="py-2 px-3 fw-bold lr-panel-header"
-                        >
-                            Your Route
-                        </Card.Header>
+                    <Card className="flex-grow-1 d-flex flex-column border-0 lr-panel">
+                        <Card.Header className="py-2 px-3 fw-bold lr-panel-header">Your Route</Card.Header>
                         <ListGroup variant="flush" className="overflow-auto flex-grow-1">
                             {selected.length === 0 ? (
                                 <ListGroup.Item

@@ -31,9 +31,7 @@ function LoginForm(props) {
                 <MetroConnector color={BLUE} vertical={false} />
                 <MetroDot color={BLUE} size="lg" />
             </div>
-            <h1 className="lr-title mb-1">
-                Sign In
-            </h1>
+            <h1 className="lr-title mb-1">Sign In</h1>
             {errormsg && (
                 <Alert variant="danger" className="py-2 mb-4">
                     {errormsg}

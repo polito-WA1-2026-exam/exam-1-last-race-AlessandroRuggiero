@@ -3,14 +3,7 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { Link, useNavigate } from "react-router";
 import UserContext from "../contexts/UserContext";
 import { BLUE } from "../constants/colors";
-
-const PILL = {
-    backgroundColor: "rgba(255,255,255,0.12)",
-    border: "1px solid rgba(255,255,255,0.22)",
-    borderRadius: "999px",
-    fontSize: "0.85rem",
-    color: "white",
-};
+import "../styles/header.css";
 
 function Header() {
     const user = useContext(UserContext);
@@ -32,18 +25,13 @@ function Header() {
 function LoggedInNav({ name }) {
     return (
         <div className="d-flex align-items-center gap-2">
-            <Link to="/leaderboard" className="px-3 py-1 text-decoration-none fw-medium" style={PILL}>
+            <Link to="/leaderboard" className="nav-pill px-3 py-1 text-decoration-none fw-medium">
                 Leaderboard
             </Link>
-            <div className="d-flex align-items-center px-3 py-1 gap-2" style={PILL}>
-                {/* <span className="fw-bold" style={{ color: RANK_COLOR(rank), fontSize: "0.8rem" }}>#{rank}</span> */}
+            <div className="nav-pill d-flex align-items-center px-3 py-1 gap-2">
                 <span className="fw-medium">{name}</span>
-                <span style={{ opacity: 0.25 }}>|</span>
-                <Link
-                    to="/logout"
-                    className="text-decoration-none"
-                    style={{ color: "rgba(255,255,255,0.65)", fontSize: "0.82rem" }}
-                >
+                <span className="nav-separator">|</span>
+                <Link to="/logout" className="nav-signout text-decoration-none">
                     Sign out
                 </Link>
             </div>
@@ -54,16 +42,7 @@ function LoggedInNav({ name }) {
 function LoginButton() {
     const navigate = useNavigate();
     return (
-        <button
-            className="fw-semibold px-3 py-1"
-            style={{
-                ...PILL,
-                backgroundColor: "rgba(255,255,255,0.15)",
-                border: "1px solid rgba(255,255,255,0.35)",
-                cursor: "pointer",
-            }}
-            onClick={() => navigate("/login")}
-        >
+        <button className="nav-pill nav-pill-login fw-semibold px-3 py-1" onClick={() => navigate("/login")}>
             Log In
         </button>
     );

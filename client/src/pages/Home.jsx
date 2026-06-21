@@ -47,9 +47,7 @@ export default function Home() {
                             <MetroConnector color={BLUE} vertical={false} />
                             <MetroDot color={BLUE} size="lg" />
                         </div>
-                        <h1 className="lr-title mb-1">
-                            LastRace
-                        </h1>
+                        <h1 className="lr-title mb-1">LastRace</h1>
                         <p className="mb-4" style={{ color: BLUE, fontSize: "0.95rem", letterSpacing: "0.04em" }}>
                             Tunnelbana edition
                         </p>

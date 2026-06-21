@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { MetroDot, MetroConnector } from "./Metro";
 import { GREY } from "../constants/colors";
+import "../styles/ticket.css";
 
 function SlotStation({ stations, offset = 0 }) {
     const [index, setIndex] = useState(offset % stations.length);
@@ -96,10 +97,8 @@ export function TicketFull({
 function RouteHeader({ from, to, fromColor, toColor }) {
     return (
         <div className="d-flex align-items-center mb-3">
-            <div style={{ flex: 1 }}>
-                <div className="mono text-secondary" style={{ fontSize: ".7rem", letterSpacing: ".1em" }}>
-                    FROM
-                </div>
+            <div className="ticket-route-col">
+                <div className="mono text-secondary ticket-route-label">FROM</div>
                 <div className="display-font fs-4" style={{ color: fromColor }}>
                     {from}
                 </div>
@@ -107,10 +106,8 @@ function RouteHeader({ from, to, fromColor, toColor }) {
 
             <i className="bi bi-arrow-right flex-shrink-0 mx-2 fs-3 text-secondary" />
 
-            <div className="text-end" style={{ flex: 1 }}>
-                <div className="mono text-secondary" style={{ fontSize: ".7rem", letterSpacing: ".1em" }}>
-                    TO
-                </div>
+            <div className="text-end ticket-route-col">
+                <div className="mono text-secondary ticket-route-label">TO</div>
                 <div className="display-font fs-4" style={{ color: toColor }}>
                     {to}
                 </div>

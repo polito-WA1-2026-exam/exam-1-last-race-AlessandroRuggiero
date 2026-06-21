@@ -3,24 +3,6 @@ import { BLUE, GREY, RED, GREEN } from "../../constants/colors";
 import { JourneyTrack } from "../../components/Metro";
 import "../../styles/display-events.css";
 
-function CoinDelta({ effect }) {
-    const positive = effect >= 0;
-    return (
-        <div
-            className="de-coin-delta"
-            style={{
-                background: positive ? "rgba(25,135,84,0.12)" : "rgba(220,53,69,0.12)",
-                border: `2px solid ${positive ? GREEN : RED}`,
-                color: positive ? GREEN : RED,
-            }}
-        >
-            {positive ? "+" : ""}
-            {effect}
-            <span className="de-coin-delta-unit">coins</span>
-        </div>
-    );
-}
-
 export default function DisplayEvents({ events, connections, departureStation, startCoins, setStateIndex }) {
     const [eventIndex, setEventIndex] = useState(0);
     const [lastStation, setLastStation] = useState(departureStation);
@@ -70,34 +52,26 @@ export default function DisplayEvents({ events, connections, departureStation, s
                     </div>
 
                     {/* Event announcement */}
-                    <div
-                        className="de-event"
-                        style={{ borderLeft: `4px solid ${positive ? "#198754" : "#dc3545"}` }}
-                    >
-                        <div
-                            className="mono de-event-label"
-                            style={{ color: positive ? GREEN : RED }}
-                        >
-                            {positive ? "Bonus event" : "Incident"}
+                    <div className="de-event" style={{ borderLeft: `4px solid ${positive ? "#198754" : "#dc3545"}` }}>
+                        <div className="mono de-event-label" style={{ color: positive ? GREEN : RED }}>
+                            {positive ? "+" : ""}
+                            {event.effect} coins
                         </div>
                         <p className="de-event-desc">{event.description}</p>
                     </div>
 
-                    {/* Coin effect + running total */}
-                    <div className="de-coin-row">
-                        <CoinDelta effect={event.effect} />
-                        <div className="de-balance">
-                            <div className="mono de-balance-label">Balance</div>
-                            <div className="de-balance-values">
-                                <span className="de-coins-before" style={{ color: GREY }}>
-                                    {coinsBefore}
-                                </span>
-                                <i className="bi bi-arrow-right de-coins-arrow" style={{ color: GREY }} />
-                                <span className="de-coins-now">{coinsNow}</span>
-                                <span className="de-coins-unit" style={{ color: GREY }}>
-                                    coins
-                                </span>
-                            </div>
+                    {/* Running total */}
+                    <div className="de-balance">
+                        <div className="mono de-balance-label">Balance</div>
+                        <div className="de-balance-values">
+                            <span className="de-coins-before" style={{ color: GREY }}>
+                                {coinsBefore}
+                            </span>
+                            <i className="bi bi-arrow-right de-coins-arrow" style={{ color: GREY }} />
+                            <span className="de-coins-now">{coinsNow}</span>
+                            <span className="de-coins-unit" style={{ color: GREY }}>
+                                coins
+                            </span>
                         </div>
                     </div>
                 </div>

@@ -70,7 +70,7 @@
 }
 
 .de-event-label {
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     letter-spacing: 0.14em;
     margin-bottom: 0.4rem;
 }
@@ -121,6 +121,7 @@
 .de-balance-values {
     display: flex;
     align-items: baseline;
+    justify-content: flex-end;
     gap: 0.3rem;
 }
 

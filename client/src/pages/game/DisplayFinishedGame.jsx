@@ -22,9 +22,7 @@ export default function DisplayFinishedGame({ result }) {
                         <MetroDot color={BLUE} size="lg" />
                     </div>
 
-                    <h1 className="lr-title mb-1">
-                        {won ? "You won!" : "You lost"}
-                    </h1>
+                    <h1 className="lr-title mb-1">{won ? "You won!" : "You lost"}</h1>
                     <p className="text-muted mb-4">
                         {won ? "Congratulations!" : "Your route did not connect the departure and the destination."}
                     </p>
