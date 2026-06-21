@@ -226,7 +226,7 @@ app.post(
             );
 
             const status = correct ? "won" : "lost";
-            let coins = game.coins;
+            let coins = 20; // initial coins
             let happenedEvents = [];
             if (status === "won") {
                 for (const station of connections) {

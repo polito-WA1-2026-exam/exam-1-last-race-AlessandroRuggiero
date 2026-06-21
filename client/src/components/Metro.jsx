@@ -119,10 +119,10 @@ export function JourneyTrack({ total, current }) {
                                 width: active ? 14 : 10,
                                 height: active ? 14 : 10,
                                 borderRadius: "50%",
-                                border: `2px solid ${done ? BLUE : GREY}`,
-                                background: done ? BLUE : "white",
+                                border: `2px solid ${done ? "white" : "rgba(255,255,255,0.35)"}`,
+                                background: done ? "white" : "transparent",
                                 transition: "all 0.3s ease",
-                                boxShadow: active ? `0 0 0 3px rgba(30,58,138,0.25)` : "none",
+                                boxShadow: active ? `0 0 0 3px rgba(255,255,255,0.25)` : "none",
                             }}
                         />
                         {i < total - 1 && (
@@ -130,7 +130,7 @@ export function JourneyTrack({ total, current }) {
                                 style={{
                                     width: 28,
                                     height: 3,
-                                    background: i < current - 1 ? BLUE : GREY,
+                                    background: i < current - 1 ? "white" : "rgba(255,255,255,0.3)",
                                     transition: "background 0.3s ease",
                                 }}
                             />
