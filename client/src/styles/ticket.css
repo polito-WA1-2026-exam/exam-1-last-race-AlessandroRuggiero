@@ -1,4 +1,11 @@
-/* CONCEPT FOR THE TICKET STILL NOT FINAL */
+.ticket-route-col {
+    flex: 1;
+}
+
+.ticket-route-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+}
 
 .display-font {
     font-weight: 800;

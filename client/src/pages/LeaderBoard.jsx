@@ -5,11 +5,12 @@ import { getLeaderboard, getNetwork } from "../api/game";
 import { useNavigate } from "react-router";
 import { RoutePreview, MetroDot, MetroConnector } from "../components/Metro";
 import { START_COLOR, END_COLOR, GREY, BLUE } from "../constants/colors";
+import "../styles/panels.css";
 
 const MEDAL = [
-    <i className="bi bi-trophy-fill" style={{ color: "#FFD700", fontSize: "1.1rem" }} />,
-    <i className="bi bi-trophy-fill" style={{ color: "#C0C0C0", fontSize: "1.1rem" }} />,
-    <i className="bi bi-trophy-fill" style={{ color: "#CD7F32", fontSize: "1.1rem" }} />,
+    <i className="bi bi-trophy-fill trophy-gold" />,
+    <i className="bi bi-trophy-fill trophy-silver" />,
+    <i className="bi bi-trophy-fill trophy-bronze" />,
 ];
 
 const formatDate = (unixSeconds) => dayjs.unix(unixSeconds).format("DD/MM/YYYY");
@@ -117,18 +118,15 @@ export default function LeaderBoard() {
                 <MetroConnector color={BLUE} vertical={false} />
                 <MetroDot color={BLUE} size="lg" />
             </div>
-            <h1 className="fw-bold mb-4" style={{ letterSpacing: "-0.02em" }}>
-                Leaderboard
-            </h1>
-            <div style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 6px 28px rgba(0,0,0,0.10)" }}>
+            <h1 className="lr-title mb-4">Leaderboard</h1>
+            <div className="lr-panel">
                 <Table hover responsive className="mb-0">
                     <thead
+                        className="lr-panel-header"
                         style={{
                             "--bs-table-bg": "white",
                             "--bs-table-cell-padding-x": "1rem",
                             "--bs-table-cell-padding-y": "0.5rem",
-                            borderBottom: `2px solid ${BLUE}`,
-                            color: "#1e1b2e",
                         }}
                     >
                         <tr>

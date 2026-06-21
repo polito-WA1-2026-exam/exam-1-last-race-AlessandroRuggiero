@@ -4,6 +4,7 @@ import { Button, Container, Row, Col } from "react-bootstrap";
 import UserContext from "../contexts/UserContext";
 import { MetroDot, MetroConnector, MetroStop } from "../components/Metro";
 import { BLUE } from "../constants/colors";
+import "../styles/panels.css";
 
 function PlayButton() {
     const navigate = useNavigate();
@@ -46,9 +47,7 @@ export default function Home() {
                             <MetroConnector color={BLUE} vertical={false} />
                             <MetroDot color={BLUE} size="lg" />
                         </div>
-                        <h1 className="fw-bold mb-1" style={{ letterSpacing: "-0.02em" }}>
-                            LastRace
-                        </h1>
+                        <h1 className="lr-title mb-1">LastRace</h1>
                         <p className="mb-4" style={{ color: BLUE, fontSize: "0.95rem", letterSpacing: "0.04em" }}>
                             Tunnelbana edition
                         </p>

@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { MetroDot, MetroConnector } from "../components/Metro";
 import { BLUE } from "../constants/colors";
+import "../styles/panels.css";
 
 function LoginForm(props) {
     const [email, setEmail] = useState("");
@@ -30,9 +31,7 @@ function LoginForm(props) {
                 <MetroConnector color={BLUE} vertical={false} />
                 <MetroDot color={BLUE} size="lg" />
             </div>
-            <h1 className="fw-bold mb-1" style={{ letterSpacing: "-0.02em" }}>
-                Sign In
-            </h1>
+            <h1 className="lr-title mb-1">Sign In</h1>
             {errormsg && (
                 <Alert variant="danger" className="py-2 mb-4">
                     {errormsg}
