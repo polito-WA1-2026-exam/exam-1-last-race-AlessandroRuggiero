@@ -17,7 +17,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: #1e3a8a;
+    background-color: #002d5a;
     color: white;
     border: none;
     border-radius: 10px;
@@ -34,7 +34,7 @@
 }
 
 .btn-lr:hover {
-    background-color: #162d6e;
+    background-color: #001e3e;
     transform: translateY(-1px);
 }
 
@@ -77,7 +77,7 @@
 }
 
 .ticket-left {
-    background: #1a2744;
+    background: #002d5a;
     color: white;
     padding: 1.4rem 1.25rem;
     min-width: 155px;

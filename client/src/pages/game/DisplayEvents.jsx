@@ -55,7 +55,7 @@ export default function DisplayEvents({ events, connections, startCoins, setStat
                 {/* Header bar */}
                 <div
                     style={{
-                        background: "#1a2744",
+                        background: "#002d5a",
                         color: "white",
                         borderRadius: "16px 16px 0 0",
                         padding: "1.1rem 1.5rem",

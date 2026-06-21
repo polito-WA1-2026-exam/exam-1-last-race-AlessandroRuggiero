@@ -3,7 +3,7 @@ import { Spinner } from "react-bootstrap";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { getGame, getNetwork, submitAnswer } from "../../api/game";
 import { SubmitRouteResult } from "../../models/submitRouteResult";
-import { GAME_DURATION } from "../../constants/game";
+import { GAME_DURATION, STARTING_COINS } from "../../constants/game";
 import PickRoute from "./PickRoute";
 import DisplayEvents from "./DisplayEvents";
 import DisplayFinishedGame from "./DisplayFinishedGame";
@@ -77,7 +77,7 @@ export default function PlayGame() {
             <DisplayEvents
                 events={result.happenedEvents}
                 connections={result.answer.map((id) => network.connections.find((c) => c.id === id))}
-                startCoins={game.coins}
+                startCoins={STARTING_COINS}
                 setStateIndex={setGameStateIndex}
             />
         );
