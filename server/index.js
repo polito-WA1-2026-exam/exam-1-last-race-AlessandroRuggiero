@@ -4,7 +4,6 @@ import morgan from "morgan";
 import cors from "cors";
 import {
     getUser,
-    getClientNetwork,
     getStations,
     createGame,
     getGame,
@@ -29,6 +28,21 @@ const port = 3001;
 // game duration settings
 const normalGameDuration = 90; // seconds
 const tollerance = 10; // percentage
+
+// network caching
+// in case we dont expect the network to change during the server execution, we can cache it to avoid reading from the database multiple times.
+const CACHE_NETWORK = true;
+let cachedNetwork = null;
+
+async function getNetwork() {
+    if (!CACHE_NETWORK || !cachedNetwork) {
+        const [connections, stations] = await Promise.all([getConnections(), getStations()]);
+        const network = new Network(stations, connections);
+        if (CACHE_NETWORK) cachedNetwork = network;
+        return network;
+    }
+    return cachedNetwork;
+}
 
 // middlewares
 app.use(express.json());
@@ -112,8 +126,8 @@ app.delete("/api/sessions/current", (req, res) => {
 // DAO functions
 app.get("/api/network", isLoggedIn, async (req, res) => {
     try {
-        const network = await getClientNetwork();
-        res.json(network);
+        let network = await getNetwork();
+        res.json(network.toClientNetwork());
     } catch (err) {
         res.status(500).json({ error: "Internal server error" });
     }
@@ -122,8 +136,7 @@ app.get("/api/network", isLoggedIn, async (req, res) => {
 app.post("/api/games", isLoggedIn, async (req, res) => {
     const user = req.user;
     try {
-        const [connections, stations] = await Promise.all([getConnections(), getStations()]);
-        const network = new Network(stations, connections);
+        const network = await getNetwork();
         const excludedStations = new Set();
         const startStation = network.getRandomStation(excludedStations);
         excludedStations.add(startStation);
@@ -189,10 +202,9 @@ app.post(
         const currentTime = dayjs().unix();
         const { connections } = req.body;
         try {
-            const [game, connectionsData, stations, events] = await Promise.all([
+            const [game, network, events] = await Promise.all([
                 getGame(req.params.id, req.user.id),
-                getConnections(),
-                getStations(),
+                getNetwork(),
                 getEvents(),
             ]);
             if (!game) return res.status(404).json({ error: "Game not found" });
@@ -207,8 +219,6 @@ app.post(
                 );
                 return res.status(409).json({ error: "Time limit exceeded" });
             }
-
-            const network = new Network(stations, connectionsData);
             const correct = network.verifyConnectionPath(
                 connections,
                 network.stationNameToId(game.startStation),
@@ -216,7 +226,7 @@ app.post(
             );
 
             const status = correct ? "won" : "lost";
-            let coins = game.coins;
+            let coins = 20; // initial coins
             let happenedEvents = [];
             if (status === "won") {
                 for (const station of connections) {

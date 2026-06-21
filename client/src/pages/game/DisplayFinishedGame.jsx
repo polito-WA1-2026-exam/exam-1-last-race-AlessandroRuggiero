@@ -1,7 +1,7 @@
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import { MetroDot, MetroConnector } from "../../components/Metro";
-import { PURPLE } from "../../constants/colors";
+import { BLUE } from "../../constants/colors";
 
 export default function DisplayFinishedGame({ result }) {
     const navigate = useNavigate();
@@ -12,13 +12,13 @@ export default function DisplayFinishedGame({ result }) {
             <Row className="justify-content-center">
                 <Col md={5}>
                     <div className="d-flex align-items-center mb-4">
-                        <MetroDot color={PURPLE} size="lg" />
-                        <MetroConnector color={PURPLE} vertical={false} />
-                        <MetroDot color={PURPLE} size="lg" />
-                        <MetroConnector color={PURPLE} vertical={false} />
-                        <MetroDot color={PURPLE} size="lg" />
-                        <MetroConnector color={PURPLE} vertical={false} />
-                        <MetroDot color={PURPLE} size="lg" />
+                        <MetroDot color={BLUE} size="lg" />
+                        <MetroConnector color={BLUE} vertical={false} />
+                        <MetroDot color={BLUE} size="lg" />
+                        <MetroConnector color={BLUE} vertical={false} />
+                        <MetroDot color={BLUE} size="lg" />
+                        <MetroConnector color={BLUE} vertical={false} />
+                        <MetroDot color={BLUE} size="lg" />
                     </div>
 
                     <h1 className="fw-bold mb-1" style={{ letterSpacing: "-0.02em" }}>
@@ -36,20 +36,31 @@ export default function DisplayFinishedGame({ result }) {
                     </Card>
 
                     <Row className="g-2">
-                        <Col>
-                            <Button variant="outline-secondary" className="fw-bold w-100" onClick={() => navigate("/")}>
-                                Back to home
-                            </Button>
-                        </Col>
-                        <Col>
+                        <Col xs={12}>
                             <Button
                                 className="fw-bold w-100"
-                                style={{ backgroundColor: PURPLE, borderColor: PURPLE }}
+                                style={{ backgroundColor: BLUE, borderColor: BLUE }}
                                 onClick={() => navigate("/play")}
                             >
                                 Try again
                             </Button>
                         </Col>
+                        <Col>
+                            <Button variant="outline-secondary" className="fw-bold w-100" onClick={() => navigate("/")}>
+                                Back to home
+                            </Button>
+                        </Col>
+                        {won && (
+                            <Col>
+                                <Button
+                                    variant="outline-secondary"
+                                    className="fw-bold w-100"
+                                    onClick={() => navigate("/leaderboard")}
+                                >
+                                    Leaderboard
+                                </Button>
+                            </Col>
+                        )}
                     </Row>
                 </Col>
             </Row>

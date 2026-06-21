@@ -46,8 +46,8 @@
 }
 
 .connection-selected {
-    background-color: rgba(111, 66, 193, 0.12) !important;
-    border-left: 3px solid #6f42c1 !important;
+    background-color: rgba(0, 83, 143, 0.12) !important; /* to prevent the background from being overridden */
+    border-left: 3px solid #00538f !important;
 }
 
 .metro-dot-lg {

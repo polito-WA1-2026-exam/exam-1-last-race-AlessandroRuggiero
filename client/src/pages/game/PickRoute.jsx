@@ -106,7 +106,7 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
                             style={{
                                 background: "white",
                                 color: "#1e1b2e",
-                                borderBottom: "2px solid #6f42c1",
+                                borderBottom: "2px solid #00538f",
                             }}
                         >
                             Connections
@@ -138,7 +138,7 @@ export default function PickRoute({ game, network, gameDuration, handleSubmit })
                             style={{
                                 background: "white",
                                 color: "#1e1b2e",
-                                borderBottom: "2px solid #6f42c1",
+                                borderBottom: "2px solid #00538f",
                             }}
                         >
                             Your Route

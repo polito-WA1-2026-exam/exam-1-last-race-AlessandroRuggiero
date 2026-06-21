@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import UserContext from "../contexts/UserContext";
 import { MetroDot, MetroConnector, MetroStop } from "../components/Metro";
-import { PURPLE } from "../constants/colors";
+import { BLUE } from "../constants/colors";
 
 function PlayButton() {
     const navigate = useNavigate();
@@ -13,7 +13,7 @@ function PlayButton() {
         return (
             <Button
                 className="fw-bold w-100"
-                style={{ backgroundColor: PURPLE, borderColor: PURPLE }}
+                style={{ backgroundColor: BLUE, borderColor: BLUE }}
                 onClick={() => navigate("/login")}
             >
                 Log in to Play
@@ -23,7 +23,7 @@ function PlayButton() {
     return (
         <Button
             className="fw-bold w-100"
-            style={{ backgroundColor: PURPLE, borderColor: PURPLE }}
+            style={{ backgroundColor: BLUE, borderColor: BLUE }}
             onClick={() => navigate("/play")}
         >
             Start a game
@@ -38,18 +38,18 @@ export default function Home() {
                 <Col md={5}>
                     <div className="sticky-top" style={{ top: "5rem" }}>
                         <div className="d-flex align-items-center mb-3">
-                            <MetroDot color={PURPLE} size="lg" />
-                            <MetroConnector color={PURPLE} vertical={false} />
-                            <MetroDot color={PURPLE} size="lg" />
-                            <MetroConnector color={PURPLE} vertical={false} />
-                            <MetroDot color={PURPLE} size="lg" />
-                            <MetroConnector color={PURPLE} vertical={false} />
-                            <MetroDot color={PURPLE} size="lg" />
+                            <MetroDot color={BLUE} size="lg" />
+                            <MetroConnector color={BLUE} vertical={false} />
+                            <MetroDot color={BLUE} size="lg" />
+                            <MetroConnector color={BLUE} vertical={false} />
+                            <MetroDot color={BLUE} size="lg" />
+                            <MetroConnector color={BLUE} vertical={false} />
+                            <MetroDot color={BLUE} size="lg" />
                         </div>
                         <h1 className="fw-bold mb-1" style={{ letterSpacing: "-0.02em" }}>
                             LastRace
                         </h1>
-                        <p className="mb-4" style={{ color: PURPLE, fontSize: "0.95rem", letterSpacing: "0.04em" }}>
+                        <p className="mb-4" style={{ color: BLUE, fontSize: "0.95rem", letterSpacing: "0.04em" }}>
                             Tunnelbana edition
                         </p>
                         <p className="text-muted mb-4">
@@ -64,7 +64,7 @@ export default function Home() {
                 <Col md={7}>
                     <p
                         className="fw-semibold mb-4"
-                        style={{ color: PURPLE, fontSize: "0.75rem", letterSpacing: "0.14em" }}
+                        style={{ color: BLUE, fontSize: "0.75rem", letterSpacing: "0.14em" }}
                     >
                         HOW TO PLAY
                     </p>
