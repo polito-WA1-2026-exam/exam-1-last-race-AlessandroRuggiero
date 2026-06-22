@@ -60,32 +60,32 @@ export default function Network(stations, connections) {
         return current === endStation;
     };
 
-    this.calculateStops = function calculateStops(startStation, endStation) {
-        // A - B - C => 1 stop
-        // A - B => 0 stops
+    this.calculateSegments = function (startStation, endStation) {
+        // from the requirements document:
+        // Centrale -> Porta Velaria -> Crocevia del Falco -> Piazza delle Lanterne counts as 3
         const path = this.bfs(startStation, endStation);
-        return path ? path.length - 2 : -1;
+        return path ? path.length - 1 : -1;
     };
 
-    this.getRandomStation = function getRandomStation(excludedStations) {
+    this.getRandomStation = function (excludedStations) {
         const stationsArray = Array.from(this.stations.keys()).filter((s) => !excludedStations.has(s));
         if (stationsArray.length === 0) throw new Error("No stations available");
         return stationsArray[Math.floor(Math.random() * stationsArray.length)];
     };
 
-    this.stationNameToId = function stationNameToId(name) {
+    this.stationNameToId = function (name) {
         for (const [id, station] of this.stations) {
             if (station.name === name) return id;
         }
         return null;
     };
 
-    this.stationIdToName = function stationIdToName(id) {
+    this.stationIdToName = function (id) {
         const station = this.stations.get(id);
         return station ? station.name : null;
     };
 
-    this.toClientNetwork = function toClientNetwork() {
+    this.toClientNetwork = function () {
         const connections = [...this.connections.values()]
             .map((c) => ({
                 station1: this.stationIdToName(c.station1),

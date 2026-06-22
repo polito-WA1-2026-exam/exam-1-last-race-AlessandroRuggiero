@@ -1,7 +1,7 @@
 export function MetroMap({ style, hideLines = false }) {
     const RED = hideLines ? "#999" : "#E7002D";
     const BLUE = hideLines ? "#999" : "#0066cc";
-    const VIOLET = hideLines ? "#999" : "#00A651";
+    const GREEN = hideLines ? "#999" : "#00A651";
     const YELLOW = hideLines ? "#999" : "#FFD700";
     const DARK = "#1A1A1A";
 
@@ -39,14 +39,14 @@ export function MetroMap({ style, hideLines = false }) {
                         strokeLinejoin="round"
                     />
 
-                    {/* Violet: horizontal (Alvik → Hötorget) */}
-                    <line x1="100" y1="180" x2="400" y2="180" stroke={VIOLET} strokeWidth="5" strokeLinecap="round" />
-                    {/* Violet: NW diagonal (Hötorget → T-Centralen) */}
-                    <line x1="400" y1="180" x2="500" y2="280" stroke={VIOLET} strokeWidth="5" strokeLinecap="round" />
-                    {/* Violet: SE diagonal (T-Centralen → Skanstull → Gullmarsplan) */}
+                    {/* Green: horizontal (Alvik → Hötorget) */}
+                    <line x1="100" y1="180" x2="400" y2="180" stroke={GREEN} strokeWidth="5" strokeLinecap="round" />
+                    {/* Green: NW diagonal (Hötorget → T-Centralen) */}
+                    <line x1="400" y1="180" x2="500" y2="280" stroke={GREEN} strokeWidth="5" strokeLinecap="round" />
+                    {/* Green: SE diagonal (T-Centralen → Skanstull → Gullmarsplan) */}
                     <polyline
                         points="500,280 600,380 700,480"
-                        stroke={VIOLET}
+                        stroke={GREEN}
                         strokeWidth="5"
                         fill="none"
                         strokeLinecap="round"
@@ -67,6 +67,37 @@ export function MetroMap({ style, hideLines = false }) {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                     />
+
+                    {/* Legend: line names */}
+                    <g>
+                        <text x="20" y="28" className="lblb">
+                            Lines
+                        </text>
+                        {[
+                            { name: "Red", color: RED },
+                            { name: "Blue", color: BLUE },
+                            { name: "Green", color: GREEN },
+                            { name: "Yellow", color: YELLOW },
+                        ].map((l, i) => {
+                            const y = 48 + i * 21;
+                            return (
+                                <g key={l.name}>
+                                    <line
+                                        x1="20"
+                                        y1={y}
+                                        x2="48"
+                                        y2={y}
+                                        stroke={l.color}
+                                        strokeWidth="5"
+                                        strokeLinecap="round"
+                                    />
+                                    <text x="56" y={y + 4} className="lbl">
+                                        {l.name}
+                                    </text>
+                                </g>
+                            );
+                        })}
+                    </g>
                 </>
             )}
 
@@ -153,10 +184,10 @@ export function MetroMap({ style, hideLines = false }) {
                 </text>
             </g>
 
-            {/* Violet line stations */}
+            {/* Green line stations */}
             <g className="stn">
                 <title>Alvik</title>
-                <circle cx="100" cy="180" r="5" fill="white" stroke={VIOLET} strokeWidth="2.5" />
+                <circle cx="100" cy="180" r="5" fill="white" stroke={GREEN} strokeWidth="2.5" />
                 <text x="100" y="165" className="lbl" textAnchor="middle">
                     Alvik
                 </text>
@@ -164,7 +195,7 @@ export function MetroMap({ style, hideLines = false }) {
 
             <g className="stn" id="s-hotorget">
                 <title>Hötorget</title>
-                <circle cx="400" cy="180" r="5" fill="white" stroke={VIOLET} strokeWidth="2.5" />
+                <circle cx="400" cy="180" r="5" fill="white" stroke={GREEN} strokeWidth="2.5" />
                 <text x="400" y="165" className="lbl" textAnchor="middle">
                     Hötorget
                 </text>
@@ -172,7 +203,7 @@ export function MetroMap({ style, hideLines = false }) {
 
             <g className="stn">
                 <title>Skanstull</title>
-                <circle cx="600" cy="380" r="5" fill="white" stroke={VIOLET} strokeWidth="2.5" />
+                <circle cx="600" cy="380" r="5" fill="white" stroke={GREEN} strokeWidth="2.5" />
                 <text x="612" y="373" className="lbl">
                     Skanstull
                 </text>
