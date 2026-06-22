@@ -56,12 +56,12 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 passport.use(
-    new LocalStrategy(async function verify(username, password, cb) {
-        const user = await getUser(username, password);
+    new LocalStrategy({ usernameField: "email" }, async function verify(email, password, cb) {
+        const user = await getUser(email, password);
 
         if (!user)
             //null -> no error, invalid credetials, message
-            return cb(null, false, "Incorrect username or password."); // error message in the WWW-Authenticated header of the response
+            return cb(null, false, "Incorrect email or password."); // error message in the WWW-Authenticated header of the response
 
         return cb(null, user);
     }),
@@ -93,10 +93,9 @@ app.use(passport.authenticate("session"));
 
 /* ROUTES */
 
-// POST /api/sessions
 app.post(
     "/api/sessions",
-    check("username").isString().notEmpty().withMessage("Username is required"),
+    check("email").isString().notEmpty().withMessage("Email is required"),
     check("password").isString().notEmpty().withMessage("Password is required"),
     (req, res, next) => {
         const errors = validationResult(req);
@@ -109,21 +108,18 @@ app.post(
     },
 );
 
-// GET /api/sessions/current
 app.get("/api/sessions/current", (req, res) => {
     if (req.isAuthenticated()) {
         res.json(req.user);
     } else res.status(401).json({ error: "Not authenticated" });
 });
 
-// DELETE /api/session/current
 app.delete("/api/sessions/current", (req, res) => {
     req.logout(() => {
         res.end();
     });
 });
 
-// DAO functions
 app.get("/api/network", isLoggedIn, async (req, res) => {
     try {
         let network = await getNetwork();
@@ -267,6 +263,6 @@ app.get(
 );
 
 // activate the server
-app.listen(port, "0.0.0.0", () => {
+app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
 });
