@@ -182,11 +182,11 @@
 
 ## Users Credentials
 
-| Username      | Email                             | Password               |
-| ------------- | --------------------------------- | ---------------------- |
-| Alessandro    | alessandro.ruggiero.dev@gmail.com | ale-password           |
-| StudentMaster | s358751@studenti.polito.it        | studentMaster-password |
-| Student       | s309582@studenti.polito.it        | student-password       |
+| Email (used for auth)             | Password (used for auth) | Username (display name on the website) |
+| --------------------------------- | ------------------------ | -------------------------------------- |
+| alessandro.ruggiero.dev@gmail.com | ale-password             | Alessandro                             |
+| s358751@studenti.polito.it        | studentMaster-password   | StudentMaster                          |
+| s309582@studenti.polito.it        | student-password         | Student                                |
 
 ## Use of AI Tools
 
