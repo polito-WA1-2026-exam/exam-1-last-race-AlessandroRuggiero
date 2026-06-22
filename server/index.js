@@ -137,7 +137,7 @@ app.post("/api/games", isLoggedIn, async (req, res) => {
         const startStation = network.getRandomStation(excludedStations);
         excludedStations.add(startStation);
         let endStation = network.getRandomStation(excludedStations);
-        while (network.calculateStops(startStation, endStation) < 3) {
+        while (network.calculateSegments(startStation, endStation) < 3) {
             excludedStations.add(endStation);
             endStation = network.getRandomStation(excludedStations);
         }
