@@ -263,6 +263,6 @@ app.get(
 );
 
 // activate the server
-app.listen(port, "0.0.0.0", () => {
+app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
 });
