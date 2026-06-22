@@ -20,19 +20,22 @@
         ```json
         { "email": "string", "password": "string" }
         ```
-    - response body: the logged-in user (401 on wrong credentials, 422 on missing fields)
+    - response body: the logged-in user
         ```json
         { "id": number, "email": "string", "username": "string" }
         ```
+    - status codes: 201 Created, 401 Unauthorized (wrong credentials), 422 Unprocessable Entity (missing fields)
 - GET `/api/sessions/current`
     - request parameters: none (uses the session cookie)
-    - response body: the current user (401 if not authenticated)
+    - response body: the current user
         ```json
         { "id": number, "email": "string", "username": "string" }
         ```
+    - status codes: 200 OK, 401 Unauthorized (not authenticated)
 - DELETE `/api/sessions/current`
     - request parameters: none
     - response body: empty (logs the user out)
+    - status codes: 200 OK
 
 ### Game (all require authentication)
 
@@ -53,6 +56,7 @@
             "stations": ["string"]
         }
         ```
+    - status codes: 200 OK, 401 Unauthorized (not authenticated), 500 Internal Server Error
 - POST `/api/games`
     - request parameters: none
     - response body: the new game
@@ -68,9 +72,10 @@
             "answer": null
         }
         ```
+    - status codes: 201 Created, 401 Unauthorized (not authenticated), 500 Internal Server Error
 - GET `/api/games/:id`
     - request parameters: `id` (game id, integer ≥ 1)
-    - response body: the game (404 if not found / not owned; an `active` game past the time limit is reported as `lost`)
+    - response body: the game (an `active` game past the time limit is reported as `lost`)
         ```json
         {
             "id": number,
@@ -83,13 +88,14 @@
             "answer": [number] | null
         }
         ```
+    - status codes: 200 OK, 401 Unauthorized (not authenticated), 404 Not Found (game not found / not owned), 422 Unprocessable Entity (invalid id), 500 Internal Server Error
 - POST `/api/games/:id/answer`
     - request parameters: `id` (game id)
     - request body: the ordered list of selected connection ids
         ```json
         { "connections": [number] }
         ```
-    - response body: (409 if already completed or over the time limit)
+    - response body:
         ```json
         {
             "status": "won" | "lost",
@@ -98,6 +104,7 @@
             "answer": [number]
         }
         ```
+    - status codes: 200 OK, 401 Unauthorized (not authenticated), 404 Not Found (game not found / not owned), 409 Conflict (already completed or over the time limit), 422 Unprocessable Entity (invalid body), 500 Internal Server Error
 - GET `/api/leaderboard`
     - request parameters: `count` (optional query, integer 1 to 250, default 10)
     - response body: ranked array of best won games from best to worst
@@ -113,6 +120,7 @@
             "endTime": number
         }]
         ```
+    - status codes: 200 OK, 401 Unauthorized (not authenticated), 422 Unprocessable Entity (invalid count), 500 Internal Server Error
 
 ## Database Tables
 
@@ -126,6 +134,8 @@
 ## Main React Components
 
 - `Header` (in `Header.jsx`): top navigation bar. Shows the name of the game (as a link that navigates to the home page). Denepending on the session state it displays the Log In button (if the user is not authenticated ) or the username, the Sign Out button and the Leaderboard button if the user is logged in.
+- `Home` (in `pages/Home.jsx`): home page showing the game description and "How to Play" instructions, with a button that prompts unauthenticated users to log in or lets authenticated users start a game.
+- `LoginForm` / `Logout` (in `pages/Auth.jsx`): authentication views. `LoginForm` renders the login form and reports credential errors; `Logout` clears the session and redirects to the home page (or an optional `returnTo` location).
 - `NewGame` (in `pages/game/NewGame.jsx`): displays the full network map to study and a "Ready" modal that creates the game and routes to it.
 - `PlayGame` (in `pages/game/PlayGame.jsx`): orchestrates an active game, fetching it when needed and switching between the route-picking, event-reveal, and results phases.
 - `PickRoute` (in `pages/game/PickRoute.jsx`): route-picking phase. Runs the 90-second countdown and lets the player select and order the connection segments of their route.
