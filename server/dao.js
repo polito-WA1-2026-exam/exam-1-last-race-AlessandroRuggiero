@@ -140,7 +140,19 @@ export function getLeaderboard(playerCount) {
 
         db.all(sql, [playerCount], (err, rows) => {
             if (err) reject(err);
-            else resolve(rows.map((r) => ({ ...r, answer: JSON.parse(r.answer) })));
+            else
+                resolve(
+                    rows.map((r) => ({
+                        userId: r.userId,
+                        username: r.username,
+                        startStation: r.startStation,
+                        endStation: r.endStation,
+                        answer: JSON.parse(r.answer),
+                        startTime: r.startTime,
+                        endTime: r.endTime,
+                        coins: r.coins,
+                    })),
+                );
         });
     });
 }
